@@ -1,4 +1,4 @@
-package com.PayMyBuddy.MoneyTransfer.Model;
+package com.PayMyBuddy.MoneyTransfer.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +16,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @Column(name = "email")
     private String email;

@@ -1,7 +1,7 @@
 package com.PayMyBuddy.MoneyTransfer;
 
-import com.PayMyBuddy.MoneyTransfer.Service.TransactionService;
-import com.PayMyBuddy.MoneyTransfer.Service.UserService;
+import com.PayMyBuddy.MoneyTransfer.service.TransactionService;
+import com.PayMyBuddy.MoneyTransfer.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -32,7 +32,8 @@ public class MoneyTransferApplication implements CommandLineRunner {
 				user -> System.out.println("transactionAsSender : " + user.getTransactionsAsReceiver().size()
 				+ " transactionAsReceiver : " + user.getTransactionsAsSender().size()
 				+ " CreditCard : " + user.getCreditCards().size()
-				+ " BankAccount : " + user.getBankAccounts().size())
+				+ " BankAccount : " + user.getBankAccounts().size()
+				+ " Role : " + user.getRole().getName())
 		);
 
 	}

@@ -1,6 +1,6 @@
-package com.PayMyBuddy.MoneyTransfer.Repository;
+package com.PayMyBuddy.MoneyTransfer.repository;
 
-import com.PayMyBuddy.MoneyTransfer.Model.BankAccount;
+import com.PayMyBuddy.MoneyTransfer.model.BankAccount;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
-package com.PayMyBuddy.MoneyTransfer.Service;
+package com.PayMyBuddy.MoneyTransfer.service;
 
-import com.PayMyBuddy.MoneyTransfer.Repository.CreditCardRepository;
+import com.PayMyBuddy.MoneyTransfer.repository.CreditCardRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

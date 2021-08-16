@@ -1,4 +1,4 @@
-package com.PayMyBuddy.MoneyTransfer.Model;
+package com.PayMyBuddy.MoneyTransfer.model;
 
 import lombok.Getter;
 import lombok.Setter;
