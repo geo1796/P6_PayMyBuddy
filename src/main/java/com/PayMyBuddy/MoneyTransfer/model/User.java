@@ -17,10 +17,6 @@ public class User {
     @Column(name = "user_id")
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
-
     @Column(name = "email")
     private String email;
 
@@ -54,7 +50,7 @@ public class User {
     @ManyToMany
     @JoinTable(
             name = "User_credit_card",
-            joinColumns = @JoinColumn(name = "user_credit_card_id"),
+            joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "card_number")
     )
     private List<CreditCard> creditCards;
@@ -62,9 +58,8 @@ public class User {
     @ManyToMany
     @JoinTable(
             name = "User_bank_account",
-            joinColumns = @JoinColumn(name = "user_bank_account_id"),
+            joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "iban")
     )
     private List<BankAccount> bankAccounts;
-
 }
