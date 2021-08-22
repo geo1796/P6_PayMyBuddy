@@ -64,11 +64,21 @@ public class User {
     )
     private List<BankAccount> bankAccounts;
 
-    @ManyToMany
+    @ManyToMany(
+            fetch = FetchType.EAGER, cascade = CascadeType.ALL
+    )
     @JoinTable(
             name = "User_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Collection<Role> roles;
+
+    public User(String email, String password, Collection<Role> roles){
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    public User(){};
 }
