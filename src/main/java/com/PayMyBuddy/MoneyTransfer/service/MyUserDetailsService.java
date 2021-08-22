@@ -3,9 +3,10 @@ package com.PayMyBuddy.MoneyTransfer.service;
 import com.PayMyBuddy.MoneyTransfer.dto.UserRegistrationDto;
 import com.PayMyBuddy.MoneyTransfer.model.Role;
 import com.PayMyBuddy.MoneyTransfer.model.User;
+import com.PayMyBuddy.MoneyTransfer.model.UserRole;
 import com.PayMyBuddy.MoneyTransfer.repository.RoleRepository;
 import com.PayMyBuddy.MoneyTransfer.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import com.PayMyBuddy.MoneyTransfer.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,7 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -25,15 +25,24 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private UserRoleRepository userRoleRepository;
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     public Iterable<User> getUsers(){ return userRepository.findAll(); }
 
     public User save(UserRegistrationDto registrationDto) {
         User user = new User(registrationDto.getEmail(),
-                passwordEncoder.encode(registrationDto.getPassword()), Arrays.asList(new Role("user")));
+                passwordEncoder.encode(registrationDto.getPassword()));
 
-        return userRepository.save(user);
+        user = userRepository.save(user);
+        Role role = roleRepository.findByName("user");
+        UserRole userRole = new UserRole(user.getId(), role.getId());
+        userRoleRepository.save(userRole);
+
+        return user;
     }
 
     @Override

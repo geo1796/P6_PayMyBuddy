@@ -74,11 +74,10 @@ public class User {
     )
     private Collection<Role> roles;
 
-    public User(String email, String password, Collection<Role> roles){
+    public User(String email, String password){
         this.email = email;
         this.password = password;
-        this.roles = roles;
     }
 
-    public User(){};
+    public User(){}
 }

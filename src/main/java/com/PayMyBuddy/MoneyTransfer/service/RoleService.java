@@ -11,7 +11,7 @@ public class RoleService {
 
     private RoleRepository roleRepository;
 
-    public Iterable<Role> getAuthorities(){ return roleRepository.findAll(); }
+    public Iterable<Role> getRoles(){ return roleRepository.findAll(); }
 
     public Role saveAuthority(Role role) { return roleRepository.save(role); }
 }

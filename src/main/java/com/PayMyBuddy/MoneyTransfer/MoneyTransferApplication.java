@@ -36,7 +36,7 @@ public class MoneyTransferApplication implements CommandLineRunner {
 				+ " transactionAsReceiver : " + user.getTransactionsAsSender().size()
 				+ " CreditCard : " + user.getCreditCards().size()
 				+ " BankAccount : " + user.getBankAccounts().size()
-				+ " Role : " + user.getRoles().toString())
+				+ " Role : " + user.getRoles().size())
 		);
 
 	}
