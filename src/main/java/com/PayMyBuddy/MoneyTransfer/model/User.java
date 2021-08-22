@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -17,7 +18,7 @@ public class User {
     @Column(name = "user_id")
     private int id;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "password")
@@ -62,4 +63,12 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "iban")
     )
     private List<BankAccount> bankAccounts;
+
+    @ManyToMany
+    @JoinTable(
+            name = "User_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Collection<Role> roles;
 }
