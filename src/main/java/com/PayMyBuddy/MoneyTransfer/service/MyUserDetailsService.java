@@ -8,12 +8,14 @@ import com.PayMyBuddy.MoneyTransfer.repository.RoleRepository;
 import com.PayMyBuddy.MoneyTransfer.repository.UserRepository;
 import com.PayMyBuddy.MoneyTransfer.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -29,22 +31,8 @@ public class MyUserDetailsService implements UserDetailsService {
     private RoleRepository roleRepository;
     @Autowired
     private UserRoleRepository userRoleRepository;
-    /*
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-
-
-    public User save(UserRegistrationDto registrationDto) {
-        User user = new User(registrationDto.getEmail(),
-                passwordEncoder.encode(registrationDto.getPassword()));
-
-        user = userRepository.save(user);
-        Role role = roleRepository.findByName("user");
-        UserRole userRole = new UserRole(user.getId(), role.getId());
-        userRoleRepository.save(userRole);
-
-        return user;
-    }*/
+    private PasswordEncoder passwordEncoder;
 
     public Iterable<User> getUsers(){ return userRepository.findAll(); }
 
@@ -63,4 +51,13 @@ public class MyUserDetailsService implements UserDetailsService {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
 
+    public Optional<User> findByEmail(String email) {return userRepository.findByEmail(email);}
+
+    public User save(UserRegistrationDto registrationDto) {
+        User newUser = new User(registrationDto.getEmail(), passwordEncoder.encode(registrationDto.getPassword()));
+        newUser = userRepository.save(newUser);
+        userRoleRepository.save(new UserRole(newUser.getId(), roleRepository.findByName("ROLE_USER").getId()));
+
+        return newUser;
+    }
 }

@@ -2,26 +2,22 @@ package com.PayMyBuddy.MoneyTransfer.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
 
-import javax.annotation.security.RolesAllowed;
 
 @Controller
 public class MainController {
 
+    @GetMapping("/")
+    public String root() {
+        return "index";
+    }
+
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
         return "login";
     }
 
-    @GetMapping("/home")
-    public String home() {
-        return "home";
-    }
-
-    @GetMapping("/index")
-    public String index (){ return "index"; }
-
-    @RolesAllowed("ROLE_ADMIN")
-    @GetMapping("/admin/home")
-    public String admin(){ return "adminHome"; }
+    @GetMapping("/admin")
+    public String admin(Model model) { return "admin"; }
 }
