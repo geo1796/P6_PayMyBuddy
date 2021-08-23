@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,10 +29,10 @@ public class MyUserDetailsService implements UserDetailsService {
     private RoleRepository roleRepository;
     @Autowired
     private UserRoleRepository userRoleRepository;
+    /*
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public Iterable<User> getUsers(){ return userRepository.findAll(); }
 
     public User save(UserRegistrationDto registrationDto) {
         User user = new User(registrationDto.getEmail(),
@@ -43,15 +44,18 @@ public class MyUserDetailsService implements UserDetailsService {
         userRoleRepository.save(userRole);
 
         return user;
-    }
+    }*/
+
+    public Iterable<User> getUsers(){ return userRepository.findAll(); }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userRepository.findByEmail(username);
-        if (user == null) {
+        Optional<User> optionalUser = userRepository.findByEmail(username);
+        if (optionalUser.isEmpty()) {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
+        User user = optionalUser.get();
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
     }
 

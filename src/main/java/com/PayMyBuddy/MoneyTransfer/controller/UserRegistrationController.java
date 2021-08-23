@@ -26,10 +26,10 @@ public class UserRegistrationController {
     public String showRegistrationForm() {
         return "registration";
     }
-
+/*
     @PostMapping
     public String registerUserAccount(@ModelAttribute("user") UserRegistrationDto registrationDto) {
         myUserDetailsService.save(registrationDto);
         return "redirect:/registration?success";
-    }
+    }*/
 }
