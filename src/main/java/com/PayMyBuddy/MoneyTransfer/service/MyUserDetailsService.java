@@ -1,6 +1,8 @@
 package com.PayMyBuddy.MoneyTransfer.service;
 
+import com.PayMyBuddy.MoneyTransfer.dto.UserDto;
 import com.PayMyBuddy.MoneyTransfer.dto.UserRegistrationDto;
+import com.PayMyBuddy.MoneyTransfer.mapper.UserMapper;
 import com.PayMyBuddy.MoneyTransfer.model.Role;
 import com.PayMyBuddy.MoneyTransfer.model.User;
 import com.PayMyBuddy.MoneyTransfer.model.UserRole;
@@ -8,13 +10,11 @@ import com.PayMyBuddy.MoneyTransfer.repository.RoleRepository;
 import com.PayMyBuddy.MoneyTransfer.repository.UserRepository;
 import com.PayMyBuddy.MoneyTransfer.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +33,8 @@ public class MyUserDetailsService implements UserDetailsService {
     private UserRoleRepository userRoleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserMapper userMapper;
 
     public Iterable<User> getUsers(){ return userRepository.findAll(); }
 
@@ -59,5 +61,10 @@ public class MyUserDetailsService implements UserDetailsService {
         userRoleRepository.save(new UserRole(newUser.getId(), roleRepository.findByName("ROLE_USER").getId()));
 
         return newUser;
+    }
+
+    public Optional<UserDto> getUser(int id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        return optionalUser.map(user -> userMapper.toDto(user));
     }
 }

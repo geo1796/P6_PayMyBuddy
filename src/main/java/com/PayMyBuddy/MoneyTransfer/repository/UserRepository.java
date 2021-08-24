@@ -1,6 +1,5 @@
 package com.PayMyBuddy.MoneyTransfer.repository;
 
-import com.PayMyBuddy.MoneyTransfer.dto.UserRegistrationDto;
 import com.PayMyBuddy.MoneyTransfer.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
