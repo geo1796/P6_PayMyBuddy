@@ -1,5 +1,6 @@
 package com.PayMyBuddy.MoneyTransfer.service;
 
+import com.PayMyBuddy.MoneyTransfer.dto.ContactDto;
 import com.PayMyBuddy.MoneyTransfer.dto.UserDto;
 import com.PayMyBuddy.MoneyTransfer.dto.UserRegistrationDto;
 import com.PayMyBuddy.MoneyTransfer.mapper.UserMapper;
@@ -18,8 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,7 +36,9 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     private UserMapper userMapper;
 
-    public Iterable<User> getUsers(){ return userRepository.findAll(); }
+    public Iterable<User> getAllUsers(){ return userRepository.findAll(); }
+
+    public Optional<User> findById(int id){ return userRepository.findById(id); }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -63,8 +65,53 @@ public class MyUserDetailsService implements UserDetailsService {
         return newUser;
     }
 
-    public Optional<UserDto> getUser(int id) {
+    public Optional<UserDto> getUserDto(int id) {
         Optional<User> optionalUser = userRepository.findById(id);
+        return optionalUser.map(user -> userMapper.toDto(user));
+    }
+
+    public Optional<UserDto> getUserDto(String contactEmail) {
+        Optional<User> optionalUser = userRepository.findByEmail(contactEmail);
+        return optionalUser.map(user -> userMapper.toDto(user));
+    }
+
+    public Iterable<UserDto> getAllUserDtos(){
+        ArrayList<UserDto> result = new ArrayList<>();
+
+        userRepository.findAll().forEach(
+                user -> result.add(userMapper.toDto(user))
+        );
+
+        return result;
+    }
+
+
+    public Boolean addContact(int userId, String contactEmail) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+
+        if (optionalUser.isPresent()){
+            Optional<User> optionalContactUser = userRepository.findByEmail(contactEmail);
+            if (optionalContactUser.isPresent()){
+                User user = optionalUser.get();
+                user.getContacts().add(optionalContactUser.get());
+                userRepository.save(user);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public Optional<ContactDto> findUserContact(UserDto userDto, String contactEmail) {
+        for(ContactDto contactDto : userDto.getContacts()){
+            if(Objects.equals(contactDto.getEmail(), contactEmail))
+                return Optional.of(contactDto);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<UserDto> findUserDtoById(int id) {
+        Optional<User> optionalUser = findById(id);
         return optionalUser.map(user -> userMapper.toDto(user));
     }
 }

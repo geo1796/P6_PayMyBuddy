@@ -31,7 +31,7 @@ public class MoneyTransferApplication implements CommandLineRunner {
 				+ " sender : " + transaction.getSender().getEmail())
 		);
 
-		myUserDetailsService.getUsers().forEach(
+		myUserDetailsService.getAllUsers().forEach(
 				user -> System.out.println("transactionAsSender : " + user.getTransactionsAsReceiver().size()
 				+ " transactionAsReceiver : " + user.getTransactionsAsSender().size()
 				+ " CreditCard : " + user.getCreditCards().size()
