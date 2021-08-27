@@ -1,10 +1,15 @@
 package com.PayMyBuddy.MoneyTransfer.controller;
 
+import com.PayMyBuddy.MoneyTransfer.dto.UserDto;
+import com.PayMyBuddy.MoneyTransfer.dto.UserRegistrationDto;
+import com.PayMyBuddy.MoneyTransfer.repository.UserRepository;
+import com.PayMyBuddy.MoneyTransfer.service.MyUserDetailsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
@@ -14,11 +19,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 public class MainControllerIT {
 
     @Autowired
     MockMvc mockMvc;
+    @Autowired
+    MyUserDetailsService myUserDetailsService;
 
     @Test
     public void shouldReturnDefaultMessage() throws Exception {
@@ -27,7 +35,13 @@ public class MainControllerIT {
 
     @Test
     public void userLoginTest() throws Exception {
-        mockMvc.perform(formLogin("/login").user("son.goku@mail.com").password("goku123")).andExpect(authenticated());
+        UserRegistrationDto userDto = new UserRegistrationDto();
+        userDto.setEmail("emailTest");
+        userDto.setConfirmEmail("emailTest");
+        userDto.setPassword("passwordTest");
+        userDto.setConfirmPassword("passwordTest");
+        myUserDetailsService.save(userDto);
+        mockMvc.perform(formLogin("/login").user("emailTest").password("passwordTest")).andExpect(authenticated());
     }
 
     @Test
@@ -46,4 +60,5 @@ public class MainControllerIT {
     public void testGetAdminShouldBeForbidden() throws Exception{
         mockMvc.perform(get("/admin")).andExpect(status().isForbidden());
     }
+
 }

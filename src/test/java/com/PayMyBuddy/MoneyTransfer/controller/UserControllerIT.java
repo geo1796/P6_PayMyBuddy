@@ -1,14 +1,12 @@
 package com.PayMyBuddy.MoneyTransfer.controller;
 
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -17,14 +15,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@SpringBootTest
+@SpringBootTest()
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
-//@DirtiesContext
 public class UserControllerIT {
 
     @Autowired
     MockMvc mockMvc;
+
 
     @WithMockUser
     @Test
@@ -73,4 +71,5 @@ public class UserControllerIT {
         mockMvc.perform(get("/user/2/contacts/john.doe@mail.com"))
                 .andExpect(status().isNotFound());
     }
+
 }

@@ -1,8 +1,8 @@
 package com.PayMyBuddy.MoneyTransfer;
 
+import com.PayMyBuddy.MoneyTransfer.service.MyUserDetailsService;
 import com.PayMyBuddy.MoneyTransfer.service.RoleService;
 import com.PayMyBuddy.MoneyTransfer.service.TransactionService;
-import com.PayMyBuddy.MoneyTransfer.service.MyUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
