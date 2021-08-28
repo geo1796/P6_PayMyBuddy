@@ -1,9 +1,9 @@
 package com.PayMyBuddy.MoneyTransfer.controller;
 
-import com.PayMyBuddy.MoneyTransfer.dto.UserDto;
-import com.PayMyBuddy.MoneyTransfer.dto.UserRegistrationDto;
-import com.PayMyBuddy.MoneyTransfer.repository.UserRepository;
+
 import com.PayMyBuddy.MoneyTransfer.service.MyUserDetailsService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -35,13 +35,7 @@ public class MainControllerIT {
 
     @Test
     public void userLoginTest() throws Exception {
-        UserRegistrationDto userDto = new UserRegistrationDto();
-        userDto.setEmail("emailTest");
-        userDto.setConfirmEmail("emailTest");
-        userDto.setPassword("passwordTest");
-        userDto.setConfirmPassword("passwordTest");
-        myUserDetailsService.save(userDto);
-        mockMvc.perform(formLogin("/login").user("emailTest").password("passwordTest")).andExpect(authenticated());
+        mockMvc.perform(formLogin("/login").user("son.goku@mail.com").password("goku123")).andExpect(authenticated());
     }
 
     @Test

@@ -86,20 +86,22 @@ public class MyUserDetailsService implements UserDetailsService {
     }
 
 
-    public Boolean addContact(int userId, String contactEmail) {
+    public void addContact(int userId, ContactDto contactDto) {
         Optional<User> optionalUser = userRepository.findById(userId);
 
         if (optionalUser.isPresent()){
+            String contactEmail = contactDto.getEmail();
             Optional<User> optionalContactUser = userRepository.findByEmail(contactEmail);
             if (optionalContactUser.isPresent()){
                 User user = optionalUser.get();
                 user.getContacts().add(optionalContactUser.get());
                 userRepository.save(user);
-                return true;
             }
+            else
+                throw new IllegalArgumentException("There is no user with email : " + contactEmail);
         }
-
-        return false;
+        else
+            throw new IllegalArgumentException("There is no user for id : " + userId);
     }
 
     public Optional<ContactDto> findUserContact(UserDto userDto, String contactEmail) {

@@ -1,21 +1,23 @@
 package com.PayMyBuddy.MoneyTransfer.controller;
 
-import org.junit.jupiter.api.Order;
+import com.PayMyBuddy.MoneyTransfer.dto.ContactDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.PayMyBuddy.MoneyTransfer.util.Json.toJsonString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest()
+@SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 public class UserControllerIT {
@@ -57,19 +59,17 @@ public class UserControllerIT {
     @WithMockUser
     @Test
     public void testAddContact() throws Exception{
-        mockMvc.perform(put("/user/2/contacts/john.doe@mail.com"))
+        ContactDto contactDto = new ContactDto();
+        contactDto.setEmail("john.doe@mail.com");
+        mockMvc.perform(put("/user/2/contacts")
+                        .contentType(MediaType.APPLICATION_JSON).content(toJsonString(contactDto)))
                 .andExpect(status().isOk());
-
-        mockMvc.perform(get("/user/2/contacts/john.doe@mail.com"))
-                .andExpect(jsonPath("$.email", is("john.doe@mail.com")));
     }
 
     @WithMockUser
     @Test
-    @Order(1)
-    public void test() throws Exception{
-        mockMvc.perform(get("/user/2/contacts/john.doe@mail.com"))
-                .andExpect(status().isNotFound());
+    public void testSendMoneyToBankAccount() throws Exception{
+
     }
 
 }
