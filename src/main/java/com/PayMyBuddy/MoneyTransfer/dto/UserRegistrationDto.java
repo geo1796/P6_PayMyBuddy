@@ -18,10 +18,8 @@ import javax.validation.constraints.NotEmpty;
 public class UserRegistrationDto {
 
     @Email
-    @NotEmpty
     private String email;
     @Email
-    @NotEmpty
     private String confirmEmail;
     @NotEmpty
     private String password;

@@ -10,7 +10,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.PayMyBuddy.MoneyTransfer.util.Json.toJsonString;
+import static com.PayMyBuddy.MoneyTransfer.util.Json.stringify;
+import static com.PayMyBuddy.MoneyTransfer.util.Json.toJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -62,7 +63,7 @@ public class UserControllerIT {
         ContactDto contactDto = new ContactDto();
         contactDto.setEmail("john.doe@mail.com");
         mockMvc.perform(put("/user/2/contacts")
-                        .contentType(MediaType.APPLICATION_JSON).content(toJsonString(contactDto)))
+                        .contentType(MediaType.APPLICATION_JSON).content(stringify(toJson(contactDto))))
                 .andExpect(status().isOk());
     }
 

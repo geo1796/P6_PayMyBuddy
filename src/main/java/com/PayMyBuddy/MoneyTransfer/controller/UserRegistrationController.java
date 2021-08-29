@@ -34,7 +34,7 @@ public class UserRegistrationController {
 
     @PostMapping
     public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDto userDto,
-                                      BindingResult result) {
+                                      BindingResult result, HttpServletResponse httpServletResponse) {
 
         Optional<User> optionalUser = myUserDetailsService.findByEmail(userDto.getEmail());
         if (optionalUser.isPresent()) {
@@ -42,6 +42,8 @@ public class UserRegistrationController {
         }
 
         if (result.hasErrors()) {
+            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            System.out.println(result.getAllErrors());
             return "registration";
         }
 
