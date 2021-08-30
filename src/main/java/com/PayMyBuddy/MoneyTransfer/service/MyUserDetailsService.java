@@ -13,6 +13,7 @@ import com.PayMyBuddy.MoneyTransfer.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -39,6 +40,11 @@ public class MyUserDetailsService implements UserDetailsService {
     public Iterable<User> getAllUsers(){ return userRepository.findAll(); }
 
     public Optional<User> findById(int id){ return userRepository.findById(id); }
+
+    public User findUser() {
+        String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(userMail).get();
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -86,23 +92,25 @@ public class MyUserDetailsService implements UserDetailsService {
     }
 
 
-    public void addContact(int userId, ContactDto contactDto) {
-        Optional<User> optionalUser = userRepository.findById(userId);
+    public void addContact(ContactDto contactDto) {
+        User user = findUser();
 
-        if (optionalUser.isPresent()){
             String contactEmail = contactDto.getEmail();
             Optional<User> optionalContactUser = userRepository.findByEmail(contactEmail);
             if (optionalContactUser.isPresent()){
-                User user = optionalUser.get();
-                user.getContacts().add(optionalContactUser.get());
-                userRepository.save(user);
+                User newContact = optionalContactUser.get();
+                List<User> contacts = user.getContacts();
+                if(contacts.contains(newContact))
+                    throw new IllegalArgumentException("This person is already in the contact list");
+                else {
+                    contacts.add(newContact);
+                    userRepository.save(user);
+                }
             }
             else
                 throw new IllegalArgumentException("There is no user with email : " + contactEmail);
         }
-        else
-            throw new IllegalArgumentException("There is no user for id : " + userId);
-    }
+
 
     public Optional<ContactDto> findUserContact(UserDto userDto, String contactEmail) {
         for(ContactDto contactDto : userDto.getContacts()){

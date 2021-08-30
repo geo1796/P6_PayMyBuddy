@@ -4,7 +4,6 @@ import com.PayMyBuddy.MoneyTransfer.dto.UserRegistrationDto;
 import com.PayMyBuddy.MoneyTransfer.model.User;
 import com.PayMyBuddy.MoneyTransfer.service.MyUserDetailsService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,7 +42,6 @@ public class UserRegistrationController {
 
         if (result.hasErrors()) {
             httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            System.out.println(result.getAllErrors());
             return "registration";
         }
 

@@ -12,11 +12,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static com.PayMyBuddy.MoneyTransfer.util.Json.stringify;
 import static com.PayMyBuddy.MoneyTransfer.util.Json.toJson;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -26,51 +26,14 @@ public class UserControllerIT {
     @Autowired
     MockMvc mockMvc;
 
-
-    @WithMockUser
+    @WithMockUser(username = "son.goku@mail.com")
     @Test
-    public void testGetUser() throws Exception {
-        mockMvc.perform(get("/user/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email", is("john.doe@mail.com")));
-    }
-
-    @WithMockUser
-    @Test
-    public void testGetNotExistingUser() throws Exception {
-        mockMvc.perform(get("/user/0"))
-                .andExpect(status().isNotFound());
-    }
-
-    @WithMockUser
-    @Test
-    public void testGetAllUsers() throws Exception{
-        mockMvc.perform(get("/allUsers"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("[0].email", is("john.doe@mail.com")));
-    }
-
-    @WithMockUser
-    @Test
-    public void testGetContact() throws Exception{
-        mockMvc.perform(get("/user/1/contacts/son.goku@mail.com"))
-                .andExpect(jsonPath("$.email", is("son.goku@mail.com")));
-    }
-
-    @WithMockUser
-    @Test
-    public void testAddContact() throws Exception{
+    public void testAddContact() throws Exception {
         ContactDto contactDto = new ContactDto();
         contactDto.setEmail("john.doe@mail.com");
-        mockMvc.perform(put("/user/2/contacts")
-                        .contentType(MediaType.APPLICATION_JSON).content(stringify(toJson(contactDto))))
-                .andExpect(status().isOk());
-    }
-
-    @WithMockUser
-    @Test
-    public void testSendMoneyToBankAccount() throws Exception{
-
+        mockMvc.perform(post("/addContact").
+                        flashAttr("contact", contactDto))
+                .andExpect(redirectedUrl("/addContact?success"));
     }
 
 }
