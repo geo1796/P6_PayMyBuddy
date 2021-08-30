@@ -25,6 +25,11 @@ public class UserController {
         return new ContactDto();
     }
 
+    @GetMapping("addContact")
+    public String showNewContactForm(){
+        return "new-contact-form";
+    }
+
     @PostMapping("/addContact")
     public String addContact(@ModelAttribute("contact") @Valid ContactDto contactDto,
                              BindingResult result, HttpServletResponse response){
