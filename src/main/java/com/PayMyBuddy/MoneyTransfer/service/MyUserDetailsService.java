@@ -3,6 +3,7 @@ package com.PayMyBuddy.MoneyTransfer.service;
 import com.PayMyBuddy.MoneyTransfer.dto.ContactDto;
 import com.PayMyBuddy.MoneyTransfer.dto.UserDto;
 import com.PayMyBuddy.MoneyTransfer.dto.UserRegistrationDto;
+import com.PayMyBuddy.MoneyTransfer.mapper.ContactMapper;
 import com.PayMyBuddy.MoneyTransfer.mapper.UserMapper;
 import com.PayMyBuddy.MoneyTransfer.model.Role;
 import com.PayMyBuddy.MoneyTransfer.model.User;
@@ -36,6 +37,8 @@ public class MyUserDetailsService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ContactMapper contactMapper;
 
     public Iterable<User> getAllUsers(){ return userRepository.findAll(); }
 
@@ -123,5 +126,14 @@ public class MyUserDetailsService implements UserDetailsService {
     public Optional<UserDto> findUserDtoById(int id) {
         Optional<User> optionalUser = findById(id);
         return optionalUser.map(user -> userMapper.toDto(user));
+    }
+
+    public Iterable<ContactDto> getUserContacts() {
+        ArrayList<ContactDto> result = new ArrayList<>();
+        findUser().getContacts().forEach(
+                contact -> result.add(contactMapper.toDto(contact))
+        );
+
+        return result;
     }
 }

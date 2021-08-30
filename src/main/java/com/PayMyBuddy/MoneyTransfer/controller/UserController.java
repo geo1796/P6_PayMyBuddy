@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +46,12 @@ public class UserController {
             return "addContact";
         }
         return "redirect:/addContact?success";
+    }
+
+    @GetMapping("/contacts")
+    public String showContactList(Model model){
+        model.addAttribute("contactList", myUserDetailsService.getUserContacts());
+        return "contact-list";
     }
 
 }
