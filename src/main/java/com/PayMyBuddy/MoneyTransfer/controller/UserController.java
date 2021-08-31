@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 
@@ -33,18 +32,17 @@ public class UserController {
 
     @PostMapping("/addContact")
     public String addContact(@ModelAttribute("contact") @Valid ContactDto contactDto,
-                             BindingResult result, HttpServletResponse response){
+                             BindingResult result){
         logger.info("calling method : addContact");
-        try {
-            myUserDetailsService.addContact(contactDto);
-            logger.info("contact added : " +contactDto.getEmail());
-            response.setStatus(HttpServletResponse.SC_CREATED);
+
+        myUserDetailsService.addContact(contactDto, result);
+        logger.info("contact added : " +contactDto.getEmail());
+
+        if (result.hasErrors()){
+            logger.error("can't add contact : ");
+            return "redirect:/addContact?error";
         }
-        catch (IllegalArgumentException e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            logger.error("can't add contact : " + e);
-            return "addContact";
-        }
+
         return "redirect:/addContact?success";
     }
 

@@ -42,7 +42,9 @@
 
 
                 <tr th:each="contact, stat : ${contactList}">
+                    <a href="/" th:href="@{/registration}">
                     <button><td class="align-middle" th:text="${contact.email}"></td></button>
+                    </a>
                 </tr>
 
             <div class="form-group">

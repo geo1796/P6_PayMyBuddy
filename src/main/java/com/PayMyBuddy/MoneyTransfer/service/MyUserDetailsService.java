@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -95,7 +96,7 @@ public class MyUserDetailsService implements UserDetailsService {
     }
 
 
-    public void addContact(ContactDto contactDto) {
+    public void addContact(ContactDto contactDto, BindingResult result) {
         User user = findUser();
 
             String contactEmail = contactDto.getEmail();
@@ -104,14 +105,14 @@ public class MyUserDetailsService implements UserDetailsService {
                 User newContact = optionalContactUser.get();
                 List<User> contacts = user.getContacts();
                 if(contacts.contains(newContact))
-                    throw new IllegalArgumentException("This person is already in the contact list");
+                    result.rejectValue("email", null, "This person is already in the contact list");
                 else {
                     contacts.add(newContact);
                     userRepository.save(user);
                 }
             }
             else
-                throw new IllegalArgumentException("There is no user with email : " + contactEmail);
+                result.rejectValue("email", null, "There is no registered user with this email");
         }
 
 

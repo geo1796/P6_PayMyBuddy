@@ -35,13 +35,17 @@ public class UserRegistrationControllerIT {
         userRegistrationDto.setPassword("password");
         userRegistrationDto.setConfirmPassword("password");
 
-        mockMvc.perform(post("/registration").flashAttr("user", userRegistrationDto)).andExpect(redirectedUrl("/registration?success"));
+        mockMvc.perform(post("/registration")
+                .flashAttr("user", userRegistrationDto))
+                .andExpect(redirectedUrl("/registration?success"));
     }
 
     @WithMockUser
     @Test
     public void testRegistrationUserAccountFailure() throws Exception{
-        mockMvc.perform(post("/registration").flashAttr("user", new UserRegistrationDto())).andExpect(status().isBadRequest());
+        mockMvc.perform(post("/registration")
+                .flashAttr("user", new UserRegistrationDto()))
+                .andExpect(redirectedUrl("/registration?error"));
     }
 
     @WithMockUser
@@ -55,8 +59,7 @@ public class UserRegistrationControllerIT {
 
         mockMvc.perform(post("/registration")
                 .flashAttr("user", userRegistrationDto))
-                .andExpect(view().name("registration"))
-                .andExpect(status().isBadRequest());
+                .andExpect(redirectedUrl("/registration?error"));
     }
 
     @WithMockUser
@@ -70,8 +73,7 @@ public class UserRegistrationControllerIT {
 
         mockMvc.perform(post("/registration")
                 .flashAttr("user", userRegistrationDto))
-                .andExpect(view().name("registration"))
-                .andExpect(status().isBadRequest());
+                .andExpect(redirectedUrl("/registration?error"));
     }
 
     @WithMockUser
@@ -85,8 +87,7 @@ public class UserRegistrationControllerIT {
 
         mockMvc.perform(post("/registration")
                 .flashAttr("user", userRegistrationDto))
-                .andExpect(view().name("registration"))
-                .andExpect(status().isBadRequest());
+                .andExpect(redirectedUrl("/registration?error"));
     }
 
 

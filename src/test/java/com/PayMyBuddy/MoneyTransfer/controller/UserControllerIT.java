@@ -1,6 +1,7 @@
 package com.PayMyBuddy.MoneyTransfer.controller;
 
 import com.PayMyBuddy.MoneyTransfer.dto.ContactDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -23,17 +24,10 @@ public class UserControllerIT {
     @Autowired
     MockMvc mockMvc;
 
-    private ContactDto contactDto = new ContactDto();
+    private ContactDto contactDto;
 
-    @WithMockUser(username = "son.goku@mail.com")
-    @Test
-    public void testAddContact() throws Exception {
-
-        contactDto.setEmail("john.doe@mail.com");
-        mockMvc.perform(post("/addContact").
-                        flashAttr("contact", contactDto))
-                .andExpect(redirectedUrl("/addContact?success"));
-    }
+    @BeforeEach
+    public void init(){ this.contactDto = new ContactDto(); }
 
     @WithMockUser(username = "son.goku@mail.com")
     @Test
@@ -49,5 +43,24 @@ public class UserControllerIT {
         mockMvc.perform(get("/contacts"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("contactList", hasItem(hasProperty("email", equalTo("son.goku@mail.com")))));
+    }
+
+    @WithMockUser(username = "son.goku@mail.com")
+    @Test
+    public void testAddNotExistingContact() throws Exception{
+        contactDto.setEmail("notExisting@mail.com");
+        mockMvc.perform(post("/addContact")
+                .flashAttr("contact", contactDto))
+                .andExpect(redirectedUrl("/addContact?error"));
+    }
+
+    @WithMockUser(username = "son.goku@mail.com")
+    @Test
+    public void testAddContact() throws Exception {
+
+        contactDto.setEmail("john.doe@mail.com");
+        mockMvc.perform(post("/addContact").
+                        flashAttr("contact", contactDto))
+                .andExpect(redirectedUrl("/addContact?success"));
     }
 }
