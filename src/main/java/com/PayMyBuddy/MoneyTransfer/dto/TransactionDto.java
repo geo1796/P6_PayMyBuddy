@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.Email;
-import java.sql.Date;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -14,13 +14,13 @@ public class TransactionDto {
 
     private String currencyCode;
 
-    private Date startDate;
-
-    private Date endDate;
-
     private String description;
 
     @Email
     private String receiverEmail;
+
+    private Date startDate;
+
+    private Date endDate;
 
 }

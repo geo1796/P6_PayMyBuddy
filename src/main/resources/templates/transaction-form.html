@@ -47,27 +47,30 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label"> Contact </label> <input
-                        id="receiverEmail" class="form-control" th:field="*{receiverEmail}" required
-                        autofocus="autofocus" />
-                </div>
-
-                <div class="form-group">
                     <label class="control-label"> Amount </label> <input
                         id="amount" class="form-control" type="number"
                         th:field="*{amount}" required autofocus="autofocus" />
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label"> Currency </label> <input
-                        id="currency" class="form-control"
-                        th:field="*{currencyCode}" required autofocus="autofocus" />
+                    <select th:field="*{receiverEmail}">
+                        <option th:each="contact, stat : ${contactList}" th:value="${contact.email}" th:text="${contact.email}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <select th:field="*{currencyCode}" required autofocus="autofocus">
+                        <option value="EUR">EUR</option>
+                        <option value="USD">USD</option>
+                        <option value="GBP">GBP</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-success">Send</button>
-                    <span><a href="/" th:href="@{/contacts}">Contact list</a></span>
+                    <span><a href="/" th:href="@{/transactions}">Transaction history</a></span>
                 </div>
+
             </form>
         </div>
     </div>

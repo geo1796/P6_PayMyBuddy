@@ -10,11 +10,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -33,11 +32,21 @@ public class TransactionControllerIT {
         transactionDto.setReceiverEmail("john.doe@mail.com");
     }
 
-    @WithMockUser
+    @WithMockUser(username = "john.doe@mail.com")
     @Test
     public void testShowTransactionForm() throws Exception{
         mockMvc.perform(get("/transaction"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("contactList", hasItem(hasProperty("email", equalTo("son.goku@mail.com")))));
+    }
+
+    @WithMockUser(username = "john.doe@mail.com")
+    @Test
+    public void testShowTransactionHistory() throws Exception{
+        mockMvc.perform(get("/transactions"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("transactionsAsSender", hasItem(hasProperty("description", equalTo("From John Doe to Son Goku")))))
+                .andExpect(model().attribute("transactionsAsReceiver", hasItem(hasProperty("description", equalTo("From Son Goku to John Doe")))));
     }
 
     @WithMockUser(username = "son.goku@mail.com")

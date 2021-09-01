@@ -29,17 +29,23 @@ public class MainControllerIT {
     MyUserDetailsService myUserDetailsService;
 
     @Test
-    public void shouldReturnDefaultMessage() throws Exception {
+    public void testShowLoginForm() throws Exception {
         mockMvc.perform(get("/login")).andExpect(status().isOk());
     }
 
+    @WithMockUser(username = "john.doe@mail.com")
     @Test
-    public void userLoginTest() throws Exception {
+    public void testShowIndex() throws Exception{
+        mockMvc.perform(get("/")).andExpect(status().isOk());
+    }
+
+    @Test
+    public void testUserLoginSuccess() throws Exception {
         mockMvc.perform(formLogin("/login").user("son.goku@mail.com").password("goku123")).andExpect(authenticated());
     }
 
     @Test
-    public void userLoginFailed() throws Exception {
+    public void testUserLoginFailure() throws Exception {
         mockMvc.perform(formLogin("/login").user("springuser").password("wrongpassword")).andExpect(unauthenticated());
     }
 

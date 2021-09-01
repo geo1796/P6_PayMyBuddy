@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="ISO-8859-1">
-    <title>Contact list</title>
+    <title>Transaction history</title>
 
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -34,19 +34,20 @@
     <div class = "row">
         <div class = "col-md-6 col-md-offset-3">
 
-            <h1> Your contacts </h1>
+            <h1> Your transactions as sender </h1>
 
-            <tr th:if="${contactList.isEmpty()}">
-                <td class="text-center" colspan="3">You don't have any friend :'(</td>
+            <tr th:each="transaction, stat : ${transactionsAsSender}">
+                <button><td class="align-middle" th:text="${transaction.description}"></td></button>
             </tr>
 
+            <h1> Your transactions as receiver </h1>
 
-                <tr th:each="contact, stat : ${contactList}">
-                    <button><td class="align-middle" th:text="${contact.email}"></td></button>
-                </tr>
+            <tr th:each="transaction, stat : ${transactionsAsReceiver}">
+                <button><td class="align-middle" th:text="${transaction.description}"></td></button>
+            </tr>
 
             <div class="form-group">
-      <span>Add a new contact ? <a href="/" th:href="@{/addContact}">Click here</a></span>
+                <span>Start a transaction ?<a href="/" th:href="@{/transaction}">Click here</a></span>
             </div>
         </div>
     </div>

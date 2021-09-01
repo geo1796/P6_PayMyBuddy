@@ -17,7 +17,10 @@ INSERT INTO User_role (id, user_id, role_id)
 VALUES (2, 2, 2);
 
 INSERT INTO Transaction (id, amount, currency_code, fee, start_date, end_date, description, sender_id, receiver_id)
-VALUES (1, 0,'EUR', 0, '2021-08-15', '2021-08-16', 'transaction test', 1, 2);
+VALUES (1, 0,'EUR', 0, '2021-08-15', '2021-08-16', 'From John Doe to Son Goku', 1, 2);
+
+INSERT INTO Transaction (id, amount, currency_code, fee, start_date, end_date, description, sender_id, receiver_id)
+VALUES (2, 0,'EUR', 0, '2021-08-15', '2021-08-16', 'From Son Goku to John Doe', 2, 1);
 
 INSERT INTO User_contact (id, user_id, contact_id)
 VALUES (1, 1, 2);

@@ -75,6 +75,8 @@ public class MyUserDetailsService implements UserDetailsService {
         return newUser;
     }
 
+    public User save(User user){ return userRepository.save(user); }
+
     public Optional<UserDto> getUserDto(int id) {
         Optional<User> optionalUser = userRepository.findById(id);
         return optionalUser.map(user -> userMapper.toDto(user));
