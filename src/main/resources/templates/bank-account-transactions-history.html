@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Bank account transactions history</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+
+</head>
+<body>
+
+<!-- create navigation bar ( header) -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span> <span
+                    class="icon-bar"></span> <span class="icon-bar"></span> <span
+                    class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" th:href="@{/}">Pay My Buddy</a>
+        </div>
+    </div>
+</nav>
+
+<br>
+<br>
+<div class = "container">
+    <div class = "row">
+        <div class = "col-md-6 col-md-offset-3">
+            <tr th:each="bankAccount, stat : ${bankAccounts}">
+
+            <h1> Your transactions for account with iban <td th:text="${bankAccount.iban}"></td> </h1>
+
+            <tr th:each="transaction, stat : ${transactionsAsSender}">
+                <button><td class="align-middle" th:text="${transaction.description}"></td></button>
+            </tr>
+
+            <h1> Your transactions as receiver </h1>
+
+            <tr th:each="transaction, stat : ${transactionsAsReceiver}">
+                <button><td class="align-middle" th:text="${transaction.description}"></td></button>
+            </tr>
+
+            </tr>
+
+            <div class="form-group">
+                <span>Start a transaction ?<a href="/" th:href="@{/transaction}">Click here</a></span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

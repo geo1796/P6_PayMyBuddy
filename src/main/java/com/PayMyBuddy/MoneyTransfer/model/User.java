@@ -40,6 +40,16 @@ public class User {
     )
     private List<Transaction> transactionsAsReceiver;
 
+    @OneToMany(
+            mappedBy = "user"
+    )
+    private List<BankAccountTransaction> bankAccountTransactions;
+
+    @OneToMany(
+            mappedBy = "user"
+    )
+    private List<CreditCardTransaction> creditCardTransactions;
+
     @OneToMany
     @JoinTable(
             name = "User_contact",

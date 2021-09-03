@@ -1,5 +1,6 @@
 package com.PayMyBuddy.MoneyTransfer.dto;
 
+import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@Generated
 public class UserDto {
 
     @NotEmpty

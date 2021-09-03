@@ -51,10 +51,10 @@ public class TransactionController {
     @GetMapping("/transactions")
     public String showTransactionHistory(Model model){
         logger.info("calling method : showTransactionHistory");
-        ArrayList<TransactionDto> transactionasSenderDtos = transactionService.getTransactionAsSenderDtos();
-        ArrayList<TransactionDto> transactionasReceiverDtos = transactionService.getTransactionAsReceiverDtos();
-        model.addAttribute("transactionsAsSender", transactionasSenderDtos);
-        model.addAttribute("transactionsAsReceiver", transactionasReceiverDtos);
+        ArrayList<TransactionDto> transactionAsSenderDtos = transactionService.getTransactionAsSenderDtos();
+        ArrayList<TransactionDto> transactionAsReceiverDtos = transactionService.getTransactionAsReceiverDtos();
+        model.addAttribute("transactionsAsSender", transactionAsSenderDtos);
+        model.addAttribute("transactionsAsReceiver", transactionAsReceiverDtos);
 
         return "transaction-history";
     }

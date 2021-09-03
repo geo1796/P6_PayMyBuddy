@@ -36,3 +36,9 @@ VALUES ('ibanTest', 123, 'passwordTest');
 
 INSERT INTO User_bank_account (id, iban, user_id)
 VALUES (1, 'ibanTest', 1);
+
+INSERT INTO Bank_account_transaction (id, iban, user_id, amount, currency_code, to_balance)
+VALUES (1, 'ibanTest', 1, 10, 'EUR', false);
+
+INSERT INTO Credit_card_transaction (id, card_number, user_id, amount, currency_code)
+VALUES (1, '0000000000000000', 1, 10, 'EUR');

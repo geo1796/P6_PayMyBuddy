@@ -47,7 +47,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     public User findUser() {
         String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByEmail(userMail).get();
+        return userRepository.findByEmail(userMail).orElse(null);
     }
 
     @Override
