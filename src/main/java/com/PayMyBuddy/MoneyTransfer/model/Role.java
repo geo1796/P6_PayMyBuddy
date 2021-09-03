@@ -2,12 +2,14 @@ package com.PayMyBuddy.MoneyTransfer.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
 
 @Entity
 @Table(name = "Role")
+@DynamicUpdate
 @Getter
 @Setter
 public class Role {

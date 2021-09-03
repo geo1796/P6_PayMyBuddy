@@ -2,6 +2,7 @@ package com.PayMyBuddy.MoneyTransfer.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,7 @@ import java.sql.Date;
 
 @Getter
 @Setter
+@DynamicUpdate
 @Entity
 @Table(name = "Credit_card")
 public class CreditCard {

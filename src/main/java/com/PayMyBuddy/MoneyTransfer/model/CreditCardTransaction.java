@@ -1,9 +1,16 @@
 package com.PayMyBuddy.MoneyTransfer.model;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Credit_card_transaction")
+@DynamicUpdate
+@Getter
+@Setter
 public class CreditCardTransaction {
 
     @Id

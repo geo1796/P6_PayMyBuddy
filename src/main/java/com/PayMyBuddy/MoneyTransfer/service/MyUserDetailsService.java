@@ -5,6 +5,7 @@ import com.PayMyBuddy.MoneyTransfer.dto.UserDto;
 import com.PayMyBuddy.MoneyTransfer.dto.UserRegistrationDto;
 import com.PayMyBuddy.MoneyTransfer.mapper.ContactMapper;
 import com.PayMyBuddy.MoneyTransfer.mapper.UserMapper;
+import com.PayMyBuddy.MoneyTransfer.model.BankAccount;
 import com.PayMyBuddy.MoneyTransfer.model.Role;
 import com.PayMyBuddy.MoneyTransfer.model.User;
 import com.PayMyBuddy.MoneyTransfer.model.UserRole;

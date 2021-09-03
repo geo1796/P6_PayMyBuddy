@@ -36,13 +36,13 @@ public class UserController {
         logger.info("calling method : addContact");
 
         myUserDetailsService.addContact(contactDto, result);
-        logger.info("contact added : " +contactDto.getEmail());
 
         if (result.hasErrors()){
-            logger.error("can't add contact : ");
+            logger.error("can't add contact");
             return "redirect:/addContact?error";
         }
 
+        logger.info("contact added : " +contactDto.getEmail());
         return "redirect:/addContact?success";
     }
 

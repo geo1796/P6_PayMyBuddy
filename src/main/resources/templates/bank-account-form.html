@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="ISO-8859-1">
+  <title>Add contact</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+</head>
+<body>
+
+<!-- create navigation bar ( header) -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed"
+              data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+              aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span> <span
+              class="icon-bar"></span> <span class="icon-bar"></span> <span
+              class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#" th:href="@{/}">Pay My Buddy</a>
+    </div>
+  </div>
+</nav>
+
+<br>
+<br>
+<!-- Create HTML registration form -->
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+
+      <!-- success message -->
+      <div th:if="${param.success}">
+        <div class="alert alert-info">You've successfully added
+          a new bank account!</div>
+      </div>
+
+      <h1>Add a new contact</h1>
+
+      <form th:action="@{/addBankAccount}" method="post" th:object="${bankAccount}">
+
+        <div th:if="${param.error}">
+          <div class="alert alert-danger">Invalid bank account</div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="iban"> iban </label> <input
+                id="iban" class="form-control" th:field="*{iban}" required
+                autofocus="autofocus" />
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="customerId"> customer id </label> <input
+                id="customerId" class="form-control" th:field="*{customerId}" required
+                autofocus="autofocus" />
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="password"> Password </label> <input
+                id="password" class="form-control" type="password"
+                th:field="*{password}" required autofocus="autofocus" />
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-success">Add bank account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>
