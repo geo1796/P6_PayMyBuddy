@@ -42,7 +42,13 @@
 
             <h1>Registration</h1>
 
+            <div th:if="${param.alreadyRegistered}">
+                <div class="alert alert-danger">There is already an account registered with that email</div>
+            </div>
 
+            <div th:if="${param.error}">
+                <div class="alert alert-danger">Invalid email or password</div>
+            </div>
 
             <form th:action="@{/registration}" method="post" th:object="${user}">
 

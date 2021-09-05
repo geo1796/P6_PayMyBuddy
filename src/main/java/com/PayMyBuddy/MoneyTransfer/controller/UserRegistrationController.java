@@ -41,10 +41,14 @@ public class UserRegistrationController {
 
         Optional<User> optionalUser = myUserDetailsService.findByEmail(userDto.getEmail());
         if (optionalUser.isPresent()) {
-            result.rejectValue("email", null, "There is already an account registered with that email");
+            logger.error("There is already an account registered with that email");
+            return "redirect:/registration?alreadyRegistered";
         }
 
         if (result.hasErrors()) {
+            result.getAllErrors().forEach(
+                    error -> logger.error(error.getDefaultMessage())
+            );
             return "redirect:/registration?error";
         }
 

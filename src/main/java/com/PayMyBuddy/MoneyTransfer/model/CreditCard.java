@@ -3,6 +3,8 @@ package com.PayMyBuddy.MoneyTransfer.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.validator.constraints.CreditCardNumber;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,6 +30,7 @@ public class CreditCard {
     private String lastName;
 
     @Column(name = "expiration_date")
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
     private Date expirationDate;
 
 }

@@ -3,6 +3,7 @@ package com.PayMyBuddy.MoneyTransfer.service;
 import com.PayMyBuddy.MoneyTransfer.dto.BankAccountDto;
 import com.PayMyBuddy.MoneyTransfer.mapper.BankAccountMapper;
 import com.PayMyBuddy.MoneyTransfer.model.BankAccount;
+import com.PayMyBuddy.MoneyTransfer.model.CreditCard;
 import com.PayMyBuddy.MoneyTransfer.model.User;
 import com.PayMyBuddy.MoneyTransfer.repository.BankAccountRepository;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -37,44 +39,31 @@ public class BankAccountService {
     }
 
     public void addBankAccount(BankAccount newBankAccount, BindingResult result) {
+        Optional<BankAccount> optionalBankAccount = bankAccountRepository.findByIban(newBankAccount.getIban());
         User user = myUserDetailsService.findUser();
-        boolean alreadyAdded = false;
-        int i = 0;
         List<BankAccount> usersBankAccounts = user.getBankAccounts();
-        List<BankAccount> bankAccounts = bankAccountRepository.findAll();
-        bankAccounts.removeAll(usersBankAccounts);
 
-        while (i < usersBankAccounts.size() && !alreadyAdded) {
-            BankAccount bankAccount = usersBankAccounts.get(i);
-            i++;
-            if (Objects.equals(bankAccount.getIban(), newBankAccount.getIban())) {
-                logger.error("This account has been added already");
-                result.rejectValue("iban", "This account has been added already");
-                alreadyAdded = true;
+        if(optionalBankAccount.isPresent()) {
+            BankAccount alreadyInDbBankAccount = optionalBankAccount.get();
+
+            if (usersBankAccounts.contains(alreadyInDbBankAccount)){
+                logger.error("this credit card is already linked to this pay my buddy account");
+                result.reject("creditCard");
+            }
+            else{
+                usersBankAccounts.add(alreadyInDbBankAccount);
+                myUserDetailsService.save(user);
             }
         }
-
-        i = 0;
-        while (i < bankAccounts.size() && !alreadyAdded) {
-            BankAccount bankAccount = bankAccounts.get(i);
-            i++;
-            if (Objects.equals(bankAccount.getIban(), newBankAccount.getIban())) {
-                logger.info("this bank account is already saved in db");
+        else{
+            try{
+                bankAccountRepository.save(newBankAccount);
                 usersBankAccounts.add(newBankAccount);
-                logger.info("bank account successfully added to user");
                 myUserDetailsService.save(user);
-                alreadyAdded = true;
             }
-
-            if (!alreadyAdded) {
-                try {
-                    bankAccountRepository.save(newBankAccount);
-                    usersBankAccounts.add(newBankAccount);
-                    myUserDetailsService.save(user);
-                } catch (DataIntegrityViolationException e) {
-                    logger.error(e.getMessage());
-                    result.rejectValue("iban", Objects.requireNonNull(e.getMessage()));
-                }
+            catch (DataIntegrityViolationException e){
+                logger.error(e.getMessage());
+                result.reject("bankAccount", Objects.requireNonNull(e.getMessage()));
             }
         }
     }

@@ -68,7 +68,6 @@ public class MyUserDetailsService implements UserDetailsService {
         ArrayList<Role> newUsersRole = new ArrayList<>();
         newUsersRole.add(roleRepository.findByName("ROLE_USER"));
         newUser.setRoles(newUsersRole);
-        //newUser.setBalanceCurrencyCode("EUR");
         newUser.setBalanceCurrencyCode(Currency.getInstance(Locale.getDefault()).toString());
         newUser = userRepository.save(newUser);
 

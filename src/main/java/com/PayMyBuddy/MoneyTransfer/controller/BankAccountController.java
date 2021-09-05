@@ -46,7 +46,7 @@ public class BankAccountController {
     }
 
     @PostMapping("/addBankAccount")
-    public String addBankAccount(@ModelAttribute("bankAccount") @Valid BankAccount bankAccount, BindingResult result){
+    public String addBankAccount(@ModelAttribute("bankAccount") BankAccount bankAccount, BindingResult result){
         logger.info("calling method : showBankAccountForm");
 
         bankAccountService.addBankAccount(bankAccount, result);

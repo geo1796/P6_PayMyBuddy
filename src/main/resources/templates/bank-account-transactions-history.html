@@ -35,13 +35,13 @@
         <div class = "col-md-6 col-md-offset-3">
             <tr th:each="bankAccount, stat : ${bankAccounts}">
 
-            <h1> Your transactions for account with iban <td th:text="${bankAccount.iban}"></td> </h1>
+            <h2> Your transactions for account with iban <td th:text="${bankAccount.iban}"></td> </h2>
 
             <tr th:each="transaction, stat : ${transactionsAsSender}">
                 <button><td class="align-middle" th:text="${transaction.description}"></td></button>
             </tr>
 
-            <h1> Your transactions as receiver </h1>
+            <h3> Your transactions as receiver </h3>
 
             <tr th:each="transaction, stat : ${transactionsAsReceiver}">
                 <button><td class="align-middle" th:text="${transaction.description}"></td></button>
