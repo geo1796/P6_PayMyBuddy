@@ -5,13 +5,10 @@ import com.PayMyBuddy.MoneyTransfer.dto.UserDto;
 import com.PayMyBuddy.MoneyTransfer.dto.UserRegistrationDto;
 import com.PayMyBuddy.MoneyTransfer.mapper.ContactMapper;
 import com.PayMyBuddy.MoneyTransfer.mapper.UserMapper;
-import com.PayMyBuddy.MoneyTransfer.model.BankAccount;
 import com.PayMyBuddy.MoneyTransfer.model.Role;
 import com.PayMyBuddy.MoneyTransfer.model.User;
-import com.PayMyBuddy.MoneyTransfer.model.UserRole;
 import com.PayMyBuddy.MoneyTransfer.repository.RoleRepository;
 import com.PayMyBuddy.MoneyTransfer.repository.UserRepository;
-import com.PayMyBuddy.MoneyTransfer.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,8 +30,6 @@ public class MyUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
-    @Autowired
-    private UserRoleRepository userRoleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -70,8 +65,12 @@ public class MyUserDetailsService implements UserDetailsService {
 
     public User save(UserRegistrationDto registrationDto) {
         User newUser = new User(registrationDto.getEmail(), passwordEncoder.encode(registrationDto.getPassword()));
+        ArrayList<Role> newUsersRole = new ArrayList<>();
+        newUsersRole.add(roleRepository.findByName("ROLE_USER"));
+        newUser.setRoles(newUsersRole);
+        //newUser.setBalanceCurrencyCode("EUR");
+        newUser.setBalanceCurrencyCode(Currency.getInstance(Locale.getDefault()).toString());
         newUser = userRepository.save(newUser);
-        userRoleRepository.save(new UserRole(newUser.getId(), roleRepository.findByName("ROLE_USER").getId()));
 
         return newUser;
     }

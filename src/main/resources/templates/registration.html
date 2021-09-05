@@ -42,12 +42,9 @@
 
             <h1>Registration</h1>
 
-            <form th:action="@{/registration}" method="post" th:object="${user}">
 
-                <div th:if="${param.error}">
-                    <div class="alert alert-danger">Invalid username or
-                        password.</div>
-                </div>
+
+            <form th:action="@{/registration}" method="post" th:object="${user}">
 
                 <div class="form-group">
                     <label class="control-label" for="email"> Email </label> <input

@@ -22,6 +22,14 @@ CREATE TABLE User_credit_card (
                 CONSTRAINT User_credit_card_pk PRIMARY KEY (id)
 );
 
+DROP TABLE IF EXISTS User_role;
+CREATE TABLE User_role (
+                id INT AUTO_INCREMENT NOT NULL,
+                user_id INT NOT NULL,
+                role_id INT NOT NULL,
+                PRIMARY KEY (id)
+);
+
 
 ALTER TABLE User_bank_account ADD CONSTRAINT Bank_account_User_bank_account_fk
 FOREIGN KEY (iban)
