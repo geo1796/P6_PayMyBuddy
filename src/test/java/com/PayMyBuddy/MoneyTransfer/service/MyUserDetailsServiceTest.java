@@ -14,9 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,7 +41,7 @@ public class MyUserDetailsServiceTest {
     public static void init(){
         role = new Role();
         role.setName("ROLE_USER");
-        ArrayList<Role> roleCollection = new ArrayList<>();
+        Set<Role> roleCollection = new HashSet<>(Collections.emptySet());
         roleCollection.add(role);
 
         user = new User();

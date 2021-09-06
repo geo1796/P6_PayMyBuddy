@@ -13,10 +13,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -41,7 +38,7 @@ public class BankAccountService {
     public void addBankAccount(BankAccount newBankAccount, BindingResult result) {
         Optional<BankAccount> optionalBankAccount = bankAccountRepository.findByIban(newBankAccount.getIban());
         User user = myUserDetailsService.findUser();
-        List<BankAccount> usersBankAccounts = user.getBankAccounts();
+        Set<BankAccount> usersBankAccounts = user.getBankAccounts();
 
         if(optionalBankAccount.isPresent()) {
             BankAccount alreadyInDbBankAccount = optionalBankAccount.get();
@@ -66,5 +63,15 @@ public class BankAccountService {
                 result.reject("bankAccount", Objects.requireNonNull(e.getMessage()));
             }
         }
+    }
+
+    public Set<BankAccountDto> findBankAccountDtos() {
+        HashSet<BankAccountDto> result = new HashSet<>();
+
+        myUserDetailsService.findUser().getBankAccounts().forEach(
+                bankAccount -> result.add(bankAccountMapper.toDto(bankAccount))
+        );
+
+        return result;
     }
 }

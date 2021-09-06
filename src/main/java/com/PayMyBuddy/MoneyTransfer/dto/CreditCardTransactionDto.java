@@ -5,20 +5,18 @@ import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
 @Generated
 @AllArgsConstructor
-public class BankAccountTransactionDto {
+@Getter
+@Setter
+public class CreditCardTransactionDto {
 
     private double amount;
 
     private String currencyCode;
 
-    private String iban;
+    private String cardNumber;
 
-    private Boolean toBalance;
-
-    public BankAccountTransactionDto(){}
+    public CreditCardTransactionDto(){}
 
 }

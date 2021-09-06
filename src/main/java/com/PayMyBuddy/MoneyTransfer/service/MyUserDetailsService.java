@@ -1,9 +1,12 @@
 package com.PayMyBuddy.MoneyTransfer.service;
 
 import com.PayMyBuddy.MoneyTransfer.dto.ContactDto;
+import com.PayMyBuddy.MoneyTransfer.dto.CreditCardDto;
 import com.PayMyBuddy.MoneyTransfer.dto.UserDto;
 import com.PayMyBuddy.MoneyTransfer.dto.UserRegistrationDto;
+import com.PayMyBuddy.MoneyTransfer.mapper.BankAccountTransactionMapper;
 import com.PayMyBuddy.MoneyTransfer.mapper.ContactMapper;
+import com.PayMyBuddy.MoneyTransfer.mapper.CreditCardMapper;
 import com.PayMyBuddy.MoneyTransfer.mapper.UserMapper;
 import com.PayMyBuddy.MoneyTransfer.model.Role;
 import com.PayMyBuddy.MoneyTransfer.model.User;
@@ -36,6 +39,8 @@ public class MyUserDetailsService implements UserDetailsService {
     private UserMapper userMapper;
     @Autowired
     private ContactMapper contactMapper;
+    @Autowired
+    private CreditCardMapper creditCardMapper;
 
     public Iterable<User> getAllUsers(){ return userRepository.findAll(); }
 
@@ -65,7 +70,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     public User save(UserRegistrationDto registrationDto) {
         User newUser = new User(registrationDto.getEmail(), passwordEncoder.encode(registrationDto.getPassword()));
-        ArrayList<Role> newUsersRole = new ArrayList<>();
+        Set<Role> newUsersRole = new HashSet<>();
         newUsersRole.add(roleRepository.findByName("ROLE_USER"));
         newUser.setRoles(newUsersRole);
         newUser.setBalanceCurrencyCode(Currency.getInstance(Locale.getDefault()).toString());
@@ -104,7 +109,7 @@ public class MyUserDetailsService implements UserDetailsService {
             Optional<User> optionalContactUser = userRepository.findByEmail(contactEmail);
             if (optionalContactUser.isPresent()){
                 User newContact = optionalContactUser.get();
-                List<User> contacts = user.getContacts();
+                Set<User> contacts = user.getContacts();
                 if(contacts.contains(newContact))
                     result.rejectValue("email", null, "This person is already in the contact list");
                 else {

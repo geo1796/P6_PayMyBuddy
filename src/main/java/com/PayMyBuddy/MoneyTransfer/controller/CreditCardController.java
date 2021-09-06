@@ -29,8 +29,7 @@ public class CreditCardController {
 
     @GetMapping("creditCards")
     public String showCreditCards(Model model){
-        User user = myUserDetailsService.findUser();
-        model.addAttribute("creditCards", user.getCreditCards());
+        model.addAttribute("creditCards", creditCardService.findCreditCardDtos());
         return "credit-cards";
     }
 

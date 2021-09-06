@@ -5,8 +5,7 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,22 +34,22 @@ public class User {
     @OneToMany(
             mappedBy = "sender"
     )
-    private List<Transaction> transactionsAsSender;
+    private Set<Transaction> transactionsAsSender;
 
     @OneToMany(
             mappedBy = "receiver"
     )
-    private List<Transaction> transactionsAsReceiver;
+    private Set<Transaction> transactionsAsReceiver;
 
     @OneToMany(
             mappedBy = "user"
     )
-    private List<BankAccountTransaction> bankAccountTransactions;
+    private Set<BankAccountTransaction> bankAccountTransactions;
 
     @OneToMany(
             mappedBy = "user"
     )
-    private List<CreditCardTransaction> creditCardTransactions;
+    private Set<CreditCardTransaction> creditCardTransactions;
 
     @OneToMany
     @JoinTable(
@@ -58,15 +57,15 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "contact_id")
     )
-    private List<User> contacts;
+    private Set<User> contacts;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "User_credit_card",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "card_number")
     )
-    private List<CreditCard> creditCards;
+    private Set<CreditCard> creditCards;
 
     @ManyToMany
     @JoinTable(
@@ -74,7 +73,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "iban")
     )
-    private List<BankAccount> bankAccounts;
+    private Set<BankAccount> bankAccounts;
 
     @ManyToMany(
             fetch = FetchType.EAGER, cascade = CascadeType.ALL
@@ -84,7 +83,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Collection<Role> roles;
+    private Set<Role> roles;
 
     public User(String email, String password){
         this.email = email;

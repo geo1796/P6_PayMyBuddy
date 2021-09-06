@@ -18,7 +18,6 @@ public class TransactionDto {
 
     private String description;
 
-    @Email
     private String receiverEmail;
 
     private Date startDate;

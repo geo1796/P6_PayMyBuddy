@@ -1,5 +1,6 @@
 package com.PayMyBuddy.MoneyTransfer.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @DynamicUpdate
 @Getter
 @Setter
+@AllArgsConstructor
 public class BankAccountTransaction {
 
     @Id
@@ -34,5 +36,7 @@ public class BankAccountTransaction {
     @ManyToOne
     @JoinColumn(name = "iban")
     private BankAccount bankAccount;
+
+    public BankAccountTransaction(){}
 
 }

@@ -19,4 +19,14 @@ public class CreditCardMapper {
         return result;
     }
 
+    public CreditCardDto toDto(CreditCard creditCard) {
+        CreditCardDto result = new CreditCardDto();
+
+        result.setExpirationDate(creditCard.getExpirationDate().toString());
+        result.setCardNumber(creditCard.getCardNumber());
+        result.setFirstName(creditCard.getFirstName());
+        result.setLastName(creditCard.getLastName());
+
+        return result;
+    }
 }

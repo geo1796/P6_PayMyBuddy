@@ -28,6 +28,9 @@ VALUES (1, 1, 2);
 INSERT INTO Credit_card (card_number, first_name, last_name, expiration_date)
 VALUES ('0000000000000000', 'John', 'Doe', '2025-01-01');
 
+INSERT INTO Credit_card (card_number, first_name, last_name, expiration_date)
+VALUES ('3333222211110000', 'John', 'Doe', '2019-01-01');
+
 INSERT INTO User_credit_card (id, user_id, card_number)
 VALUES (1, 1, '0000000000000000');
 
@@ -41,4 +44,4 @@ INSERT INTO Bank_account_transaction (id, iban, user_id, amount, currency_code, 
 VALUES (1, 'ibanTest', 1, 10, 'EUR', false);
 
 INSERT INTO Credit_card_transaction (id, card_number, user_id, amount, currency_code)
-VALUES (1, '0000000000000000', 1, 10, 'EUR');
+VALUES (1, '0000000000000000', 1, 100, 'EUR');

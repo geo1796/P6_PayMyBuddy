@@ -27,5 +27,4 @@ public class UserDto {
 
     private List<TransactionDto> transactionsAsReceiver;
 
-
 }

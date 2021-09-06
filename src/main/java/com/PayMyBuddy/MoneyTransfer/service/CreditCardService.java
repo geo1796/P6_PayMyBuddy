@@ -12,9 +12,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -26,9 +29,20 @@ public class CreditCardService {
     private CreditCardMapper creditCardMapper;
 
     public void addCreditCard(CreditCardDto creditCardDto, BindingResult result) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            if(dateFormat.parse(creditCardDto.getExpirationDate()).before(Date.from(Instant.now()))) { //checking if the credit card is expired
+                result.reject("creditCard", "credit card expired");
+                return;
+            }
+        } catch (ParseException e) {
+            result.reject("creditCard", "can't parse expiration date");
+            return;
+        }
+
         Optional<CreditCard> optionalCreditCard = creditCardRepository.findByCardNumber(creditCardDto.getCardNumber());
         User user = myUserDetailsService.findUser();
-        List<CreditCard> usersCreditCards = user.getCreditCards();
+        Set<CreditCard> usersCreditCards = user.getCreditCards();
 
         if(optionalCreditCard.isPresent()) {
             CreditCard alreadyInDbCreditCard = optionalCreditCard.get();
@@ -54,5 +68,20 @@ public class CreditCardService {
                 result.reject("crediCard", Objects.requireNonNull(e.getMessage()));
             }
         }
+    }
+
+    public Set<CreditCard> getAllUsersCreditCards() {
+        return myUserDetailsService.findUser().getCreditCards();
+    }
+
+    public Set<CreditCardDto> findCreditCardDtos() {
+        User user = myUserDetailsService.findUser();
+        HashSet<CreditCardDto> result = new HashSet<>();
+
+        user.getCreditCards().forEach(
+                creditCard -> result.add(creditCardMapper.toDto(creditCard))
+        );
+
+        return result;
     }
 }
