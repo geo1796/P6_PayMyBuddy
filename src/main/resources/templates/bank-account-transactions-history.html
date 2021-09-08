@@ -33,24 +33,17 @@
 <div class = "container">
     <div class = "row">
         <div class = "col-md-6 col-md-offset-3">
-            <tr th:each="bankAccount, stat : ${bankAccounts}">
+            <h1> Your bank account transactions </h1>
 
-            <h2> Your transactions for account with iban <td th:text="${bankAccount.iban}"></td> </h2>
 
-            <tr th:each="transaction, stat : ${transactionsAsSender}">
-                <button><td class="align-middle" th:text="${transaction.description}"></td></button>
+            <tr th:each="transaction, stat : ${bankAccountTransactions}">
+                <button>amount : <td class="align-middle" th:text="${transaction.amount}"></td> <td class="align-middle" th:text="${transaction.currencyCode}"></td>
+                    <br>iban : <td class="align-middle" th:text="${transaction.iban}"></td></button>
             </tr>
 
-            <h3> Your transactions as receiver </h3>
-
-            <tr th:each="transaction, stat : ${transactionsAsReceiver}">
-                <button><td class="align-middle" th:text="${transaction.description}"></td></button>
-            </tr>
-
-            </tr>
 
             <div class="form-group">
-                <span>Start a transaction ?<a href="/" th:href="@{/transaction}">Click here</a></span>
+                <span>Start a transaction between your Pay My Buddy account and one of your bank accounts ? <a href="/" th:href="@{/bankAccountTransaction}">Click here</a></span>
             </div>
         </div>
     </div>

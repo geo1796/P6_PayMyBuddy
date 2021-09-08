@@ -20,8 +20,7 @@ public class TransactionDto {
 
     private String receiverEmail;
 
+    private String senderEmail;
+
     private Date startDate;
-
-    private Date endDate;
-
 }

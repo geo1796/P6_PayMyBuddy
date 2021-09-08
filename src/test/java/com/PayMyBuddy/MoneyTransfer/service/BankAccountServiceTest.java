@@ -4,7 +4,6 @@ import com.PayMyBuddy.MoneyTransfer.dto.BankAccountDto;
 import com.PayMyBuddy.MoneyTransfer.mapper.BankAccountMapper;
 import com.PayMyBuddy.MoneyTransfer.model.BankAccount;
 import com.PayMyBuddy.MoneyTransfer.model.User;
-import com.PayMyBuddy.MoneyTransfer.repository.BankAccountRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

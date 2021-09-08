@@ -2,7 +2,6 @@ package com.PayMyBuddy.MoneyTransfer.service;
 
 import com.PayMyBuddy.MoneyTransfer.dto.BankAccountTransactionDto;
 import com.PayMyBuddy.MoneyTransfer.mapper.BankAccountTransactionMapper;
-import com.PayMyBuddy.MoneyTransfer.model.BankAccount;
 import com.PayMyBuddy.MoneyTransfer.model.BankAccountTransaction;
 import com.PayMyBuddy.MoneyTransfer.model.User;
 import org.junit.jupiter.api.Test;

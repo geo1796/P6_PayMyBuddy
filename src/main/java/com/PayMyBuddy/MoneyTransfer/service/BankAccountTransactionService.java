@@ -7,6 +7,7 @@ import com.PayMyBuddy.MoneyTransfer.model.*;
 import com.PayMyBuddy.MoneyTransfer.repository.BankAccountRepository;
 import com.PayMyBuddy.MoneyTransfer.repository.BankAccountTransactionRepository;
 import com.PayMyBuddy.MoneyTransfer.repository.UserRepository;
+import com.PayMyBuddy.MoneyTransfer.util.CurrencyConverter;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,8 +47,12 @@ public class BankAccountTransactionService {
     }
 
     public void addBankAccountTransaction(BankAccountTransactionDto bankAccountTransactionDto, BindingResult result) {
-
-        //TODO taux de change
+        double transactionAmount = bankAccountTransactionDto.getAmount();
+        if(transactionAmount <= 0.){
+            result.rejectValue("amount", "transaction can't be null");
+            logger.error("transaction can't be null");
+            return;
+        }
 
         Optional<BankAccount> optionalBankAccount = bankAccountRepository.findByIban(bankAccountTransactionDto.getIban());
         if(optionalBankAccount.isPresent()) {
@@ -57,13 +62,14 @@ public class BankAccountTransactionService {
                 BankAccountTransaction bankAccountTransaction = bankAccountTransactionMapper.toEntity(bankAccountTransactionDto, user, bankAccount);
                 bankAccountTransactionRepository.save(bankAccountTransaction);
 
-                double transactionAmount = bankAccountTransaction.getAmount();
                 if (bankAccountTransaction.getToBalance())
-                    user.setBalance(user.getBalance() + transactionAmount);
+                    user.setBalance(user.getBalance() + CurrencyConverter.convert(
+                            bankAccountTransaction.getCurrencyCode(), user.getBalanceCurrencyCode(), transactionAmount));
                 else{
                     double usersBalance = user.getBalance();
                     if (usersBalance > transactionAmount)
-                        user.setBalance(user.getBalance() - bankAccountTransaction.getAmount());
+                        user.setBalance(user.getBalance() - CurrencyConverter.convert(
+                                user.getBalanceCurrencyCode(), bankAccountTransaction.getCurrencyCode(), bankAccountTransaction.getAmount()));
                     else{
                         result.reject("bankAccountTransaction", "not enough money on this Pay My Buddy account to proceed transaction");
                         logger.error("not enough money on this Pay My Buddy account to proceed transaction");

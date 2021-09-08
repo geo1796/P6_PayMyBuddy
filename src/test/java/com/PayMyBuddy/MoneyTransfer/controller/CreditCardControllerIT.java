@@ -3,6 +3,7 @@ package com.PayMyBuddy.MoneyTransfer.controller;
 import com.PayMyBuddy.MoneyTransfer.dto.CreditCardDto;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,15 +20,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CreditCardControllerIT {
 
     @Autowired
     MockMvc mockMvc;
 
-    private static CreditCardDto creditCard;
+    private CreditCardDto creditCard;
 
     @BeforeAll
-    static void init(){
+    public void init(){
         creditCard = new CreditCardDto();
         creditCard.setLastName("Doe");
         creditCard.setFirstName("John");

@@ -37,13 +37,15 @@
             <h1> Your transactions as sender </h1>
 
             <tr th:each="transaction, stat : ${transactionsAsSender}">
-                <button><td class="align-middle" th:text="${transaction.description}"></td></button>
+                <button>amount : <td class="align-middle" th:text="${transaction.amount}"></td> <td class="align-middle" th:text="${transaction.currencyCode}"></td>
+                <br>receiver : <td class="align-middle" th:text="${transaction.receiverEmail}"></td></button>
             </tr>
 
             <h1> Your transactions as receiver </h1>
 
             <tr th:each="transaction, stat : ${transactionsAsReceiver}">
-                <button><td class="align-middle" th:text="${transaction.description}"></td></button>
+                <button>amount : <td class="align-middle" th:text="${transaction.amount}"></td> <td class="align-middle" th:text="${transaction.currencyCode}"></td>
+                <br>sender : <td class="align-middle" th:text="${transaction.senderEmail}"></button>
             </tr>
 
             <div class="form-group">

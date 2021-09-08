@@ -44,8 +44,8 @@ public class BankAccountService {
             BankAccount alreadyInDbBankAccount = optionalBankAccount.get();
 
             if (usersBankAccounts.contains(alreadyInDbBankAccount)){
-                logger.error("this credit card is already linked to this pay my buddy account");
-                result.reject("creditCard");
+                logger.error("this bank account is already linked to this pay my buddy account");
+                result.reject("bankAccount", "this bank account is already linked to this pay my buddy account");
             }
             else{
                 usersBankAccounts.add(alreadyInDbBankAccount);
@@ -60,7 +60,7 @@ public class BankAccountService {
             }
             catch (DataIntegrityViolationException e){
                 logger.error(e.getMessage());
-                result.reject("bankAccount", Objects.requireNonNull(e.getMessage()));
+                result.reject("bankAccount", "an error occurred");
             }
         }
     }

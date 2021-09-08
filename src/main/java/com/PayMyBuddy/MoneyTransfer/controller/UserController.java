@@ -8,9 +8,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @Controller
@@ -19,6 +21,7 @@ public class UserController {
 
     private MyUserDetailsService myUserDetailsService;
     private static final Logger logger = LogManager.getLogger("UserController");
+    private List<ObjectError> errors;
 
     @ModelAttribute("contact")
     public ContactDto contactDto() {
@@ -26,7 +29,9 @@ public class UserController {
     }
 
     @GetMapping("addContact")
-    public String showNewContactForm(){
+    public String showNewContactForm(Model model){
+        logger.info("calling method : showNewContactForm");
+        model.addAttribute("errors", errors);
         return "new-contact-form";
     }
 
@@ -39,15 +44,17 @@ public class UserController {
 
         if (result.hasErrors()){
             logger.error("can't add contact");
+            errors = result.getAllErrors();
             return "redirect:/addContact?error";
         }
 
-        logger.info("contact added : " +contactDto.getEmail());
+        logger.info("contact added : " + contactDto.getEmail());
         return "redirect:/addContact?success";
     }
 
     @GetMapping("/contacts")
     public String showContactList(Model model){
+        logger.info("calling method : showContactList");
         model.addAttribute("contactList", myUserDetailsService.getUserContacts());
         return "contact-list";
     }

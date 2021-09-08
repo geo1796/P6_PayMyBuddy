@@ -37,11 +37,12 @@
             <h1> Your credit card transactions </h1>
 
             <tr th:each="transaction, stat : ${creditCardTransactions}">
-                <button><td class="align-middle" th:text="${transaction.amount}"></td></button>
+                <button>amount : <td class="align-middle" th:text="${transaction.amount}"></td> <td class="align-middle" th:text="${transaction.currencyCode}"></td>
+                <br>card number : <td class="align-middle" th:text="${transaction.cardNumber}"></td></button>
             </tr>
 
             <div class="form-group">
-                <span>Start a credit card transaction ?<a href="/" th:href="@{/creditCardTransaction}">Click here</a></span>
+                <span>Send money to your Pay My Buddy account with one of your credit cards ? <a href="/" th:href="@{/creditCardTransaction}">Click here</a></span>
             </div>
         </div>
     </div>

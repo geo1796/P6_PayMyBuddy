@@ -4,6 +4,7 @@ import com.PayMyBuddy.MoneyTransfer.dto.BankAccountTransactionDto;
 import com.PayMyBuddy.MoneyTransfer.model.BankAccountTransaction;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,16 +22,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BankAccountTransactionControllerIT {
 
     @Autowired
     MockMvc mockMvc;
 
-    private static BankAccountTransactionDto bankAccountTransactionDto;
-    private static BankAccountTransaction bankAccountTransaction;
+    private BankAccountTransactionDto bankAccountTransactionDto;
+    private BankAccountTransaction bankAccountTransaction;
 
     @BeforeAll
-    static void init(){
+    public void init(){
         bankAccountTransactionDto = new BankAccountTransactionDto();
         bankAccountTransaction = new BankAccountTransaction();
     }

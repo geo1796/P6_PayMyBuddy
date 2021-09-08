@@ -8,6 +8,7 @@ import com.PayMyBuddy.MoneyTransfer.model.User;
 import com.PayMyBuddy.MoneyTransfer.repository.CreditCardRepository;
 import com.PayMyBuddy.MoneyTransfer.repository.CreditCardTransactionRepository;
 import com.PayMyBuddy.MoneyTransfer.repository.UserRepository;
+import com.PayMyBuddy.MoneyTransfer.util.CurrencyConverter;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,9 +43,12 @@ public class CreditCardTransactionService {
     }
 
     public void addCreditCardTransaction(CreditCardTransactionDto creditCardTransactionDto, BindingResult result) {
-
-
-        //TODO taux de change
+        double transactionAmount = creditCardTransactionDto.getAmount();
+        if(transactionAmount <= 0.){
+            result.rejectValue("amount", "transaction can't be null");
+            logger.error("transaction can't be null");
+            return;
+        }
 
         Optional<CreditCard> optionalCreditCard = creditCardRepository.findByCardNumber(creditCardTransactionDto.getCardNumber());
         if(optionalCreditCard.isPresent()) {
@@ -54,17 +58,21 @@ public class CreditCardTransactionService {
                 User user = myUserDetailsService.findUser();
                 CreditCardTransaction creditCardTransaction = creditCardTransactionMapper.toEntity(creditCardTransactionDto, user, creditCard);
                 creditCardTransactionRepository.save(creditCardTransaction);
-                user.setBalance(user.getBalance() + creditCardTransactionDto.getAmount());
+                user.setBalance(user.getBalance() + CurrencyConverter.convert(
+                        creditCardTransactionDto.getCurrencyCode(), user.getBalanceCurrencyCode(), transactionAmount));
                 userRepository.save(user);
             }
-            else
+            else {
                 result.reject("creditCardTransaction", "this credit card is expired");
+                logger.error("this credit card is expired");
+            }
         }
-        else
+        else {
             result.reject("creditCardTransaction", "unknown credit card number");
+            logger.error("unknown credit card");
+        }
 
 
     }
-
 
 }

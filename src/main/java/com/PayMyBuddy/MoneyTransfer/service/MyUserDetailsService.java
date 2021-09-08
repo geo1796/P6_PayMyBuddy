@@ -1,10 +1,8 @@
 package com.PayMyBuddy.MoneyTransfer.service;
 
 import com.PayMyBuddy.MoneyTransfer.dto.ContactDto;
-import com.PayMyBuddy.MoneyTransfer.dto.CreditCardDto;
 import com.PayMyBuddy.MoneyTransfer.dto.UserDto;
 import com.PayMyBuddy.MoneyTransfer.dto.UserRegistrationDto;
-import com.PayMyBuddy.MoneyTransfer.mapper.BankAccountTransactionMapper;
 import com.PayMyBuddy.MoneyTransfer.mapper.ContactMapper;
 import com.PayMyBuddy.MoneyTransfer.mapper.CreditCardMapper;
 import com.PayMyBuddy.MoneyTransfer.mapper.UserMapper;
@@ -12,6 +10,8 @@ import com.PayMyBuddy.MoneyTransfer.model.Role;
 import com.PayMyBuddy.MoneyTransfer.model.User;
 import com.PayMyBuddy.MoneyTransfer.repository.RoleRepository;
 import com.PayMyBuddy.MoneyTransfer.repository.UserRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
+    private static final Logger logger = LogManager.getLogger("MyUserDetailsService");
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -110,15 +111,19 @@ public class MyUserDetailsService implements UserDetailsService {
             if (optionalContactUser.isPresent()){
                 User newContact = optionalContactUser.get();
                 Set<User> contacts = user.getContacts();
-                if(contacts.contains(newContact))
+                if(contacts.contains(newContact)) {
                     result.rejectValue("email", null, "This person is already in the contact list");
+                    logger.error("This person is already in the contact list");
+                }
                 else {
                     contacts.add(newContact);
                     userRepository.save(user);
                 }
             }
-            else
+            else {
                 result.rejectValue("email", null, "There is no registered user with this email");
+                logger.error("There is no registered user with this email");
+            }
         }
 
 

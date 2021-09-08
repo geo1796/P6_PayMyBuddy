@@ -1,10 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="ISO-8859-1">
+    <title>Bank account transaction form</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
 </head>
 <body>
 
+<!-- create navigation bar ( header) -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span> <span
+                    class="icon-bar"></span> <span class="icon-bar"></span> <span
+                    class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" th:href="@{/}">Pay My Buddy</a>
+        </div>
+    </div>
+</nav>
+
+<br>
+<br>
+<!-- Create HTML registration form -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+
+            <!-- success message -->
+            <div th:if="${param.success}">
+                <div class="alert alert-info">Your money has been sent</div>
+            </div>
+
+            <h1>Bank account transaction form</h1>
+
+            <div th:if="${param.error}">
+                <div class="alert alert-danger">
+                    <tr th:if="${errors.isEmpty()}">An error occurred</tr>
+                    <ul>
+                        <li th:each="error, stat : ${errors}" th:text="${error.defaultMessage}" class="error"/>
+                    </ul>
+                </div>
+            </div>
+
+            <form th:action="@{/bankAccountTransaction}" method="post" th:object="${bankAccountTransaction}">
+
+                <div class="form-group">
+                    <label class="control-label"> Amount </label> <input
+                        id="amount" class="form-control" type="number"
+                        th:field="*{amount}" required autofocus="autofocus" />
+                </div>
+
+                <div class="form-group">
+                    <select th:field="*{currencyCode}" required autofocus="autofocus">
+                        <option value="EUR">EUR</option>
+                        <option value="USD">USD</option>
+                        <option value="GBP">GBP</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <select th:field="*{iban}">
+                        <option th:each="bankAccount, stat : ${bankAccounts}" th:value="${bankAccount.iban}" th:text="${bankAccount.iban}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <select th:field="*{toBalance}" required autofocus="autofocus">
+                        <option value=true>From bank account to Pay My Buddy account</option>
+                        <option value=false>From Pay My Buddy account to bank account</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">Send</button>
+                    <span><a href="/" th:href="@{/bankAccountTransactions}">Bank account transactions history</a></span>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>

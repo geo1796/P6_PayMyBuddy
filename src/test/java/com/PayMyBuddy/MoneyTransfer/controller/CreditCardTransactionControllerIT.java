@@ -8,6 +8,7 @@ import com.PayMyBuddy.MoneyTransfer.model.User;
 import com.PayMyBuddy.MoneyTransfer.service.MyUserDetailsService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CreditCardTransactionControllerIT {
 
     @Autowired
@@ -31,10 +33,10 @@ public class CreditCardTransactionControllerIT {
     @Autowired
     MyUserDetailsService myUserDetailsService;
 
-    private static CreditCardTransactionDto creditCardTransactionDto;
+    private CreditCardTransactionDto creditCardTransactionDto;
 
     @BeforeAll
-    static void init(){
+    public void setup(){
         creditCardTransactionDto = new CreditCardTransactionDto();
         creditCardTransactionDto.setAmount(100);
     }
@@ -58,6 +60,8 @@ public class CreditCardTransactionControllerIT {
     @Test
     public void testFromCreditCardToBalance() throws Exception{
         creditCardTransactionDto.setCardNumber("0000000000000000");
+        creditCardTransactionDto.setCurrencyCode("EUR");
+
         mockMvc.perform(post("/creditCardTransaction")
                         .flashAttr("creditCardTransaction", creditCardTransactionDto))
                 .andExpect(redirectedUrl("/creditCardTransaction?success"));

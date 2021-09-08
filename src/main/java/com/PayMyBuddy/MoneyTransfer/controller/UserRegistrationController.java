@@ -9,9 +9,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -22,6 +24,7 @@ public class UserRegistrationController {
 
     private static final Logger logger = LogManager.getLogger("UserRegistrationController");
     private MyUserDetailsService myUserDetailsService;
+    private List<ObjectError> errors;
 
     @ModelAttribute("user")
     public UserRegistrationDto userRegistrationDto() {
@@ -31,6 +34,7 @@ public class UserRegistrationController {
     @GetMapping
     public String showRegistrationForm(Model model) {
         logger.info("calling method : showRegistrationForm");
+        model.addAttribute("errors", errors);
         return "registration";
     }
 
@@ -41,18 +45,17 @@ public class UserRegistrationController {
 
         Optional<User> optionalUser = myUserDetailsService.findByEmail(userDto.getEmail());
         if (optionalUser.isPresent()) {
-            logger.error("There is already an account registered with that email");
-            return "redirect:/registration?alreadyRegistered";
+            result.reject("user", "There is already an account registered with that email");
         }
 
         if (result.hasErrors()) {
-            result.getAllErrors().forEach(
-                    error -> logger.error(error.getDefaultMessage())
-            );
+            errors = result.getAllErrors();
+            logger.error("can't register user");
             return "redirect:/registration?error";
         }
 
         myUserDetailsService.save(userDto);
+        logger.info("user registration success");
         return "redirect:/registration?success";
     }
 }

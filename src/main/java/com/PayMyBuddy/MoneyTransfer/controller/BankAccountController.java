@@ -9,12 +9,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -23,6 +24,7 @@ public class BankAccountController {
 
     private static final Logger logger = LogManager.getLogger("BankAccountController");
     private BankAccountService bankAccountService;
+    private List<ObjectError> errors;
 
     @ModelAttribute("bankAccount")
     public BankAccount bankAccount() {
@@ -40,7 +42,8 @@ public class BankAccountController {
     }
 
     @GetMapping("/addBankAccount")
-    public String showBankAccountForm(){
+    public String showBankAccountForm(Model model){
+        model.addAttribute("errors", errors);
         logger.info("calling method : showBankAccountForm");
         return "bank-account-form";
     }
@@ -53,6 +56,7 @@ public class BankAccountController {
 
         if (result.hasErrors()){
             logger.error("can't add bank account");
+            errors = result.getAllErrors();
             return "redirect:/addBankAccount?error";
         }
 

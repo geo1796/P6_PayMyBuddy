@@ -44,7 +44,12 @@
       <form th:action="@{/addBankAccount}" method="post" th:object="${bankAccount}">
 
         <div th:if="${param.error}">
-          <div class="alert alert-danger">Invalid bank account</div>
+          <div class="alert alert-danger">
+            <tr th:if="${errors.isEmpty()}">An error occurred</tr>
+            <ul>
+              <li th:each="error, stat : ${errors}" th:text="${error.defaultMessage}" class="error"/>
+            </ul>
+          </div>
         </div>
 
         <div class="form-group">

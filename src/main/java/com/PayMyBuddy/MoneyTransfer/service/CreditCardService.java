@@ -33,10 +33,12 @@ public class CreditCardService {
         try {
             if(dateFormat.parse(creditCardDto.getExpirationDate()).before(Date.from(Instant.now()))) { //checking if the credit card is expired
                 result.reject("creditCard", "credit card expired");
+                logger.error("credit card expired");
                 return;
             }
         } catch (ParseException e) {
             result.reject("creditCard", "can't parse expiration date");
+            logger.error("can't parse expiration date");
             return;
         }
 
@@ -49,7 +51,7 @@ public class CreditCardService {
 
             if (usersCreditCards.contains(alreadyInDbCreditCard)){
                 logger.error("this credit card is already linked to this pay my buddy account");
-                result.reject("creditCard");
+                result.reject("creditCard", "this credit card is already linked to this pay my buddy account");
             }
             else{
                 usersCreditCards.add(alreadyInDbCreditCard);
@@ -65,7 +67,7 @@ public class CreditCardService {
             }
             catch (DataIntegrityViolationException e){
                 logger.error(e.getMessage());
-                result.reject("crediCard", Objects.requireNonNull(e.getMessage()));
+                result.reject("creditCard", "an error occurred");
             }
         }
     }

@@ -59,7 +59,7 @@ public class UserRegistrationControllerIT {
 
         mockMvc.perform(post("/registration")
                 .flashAttr("user", userRegistrationDto))
-                .andExpect(redirectedUrl("/registration?alreadyRegistered"));
+                .andExpect(redirectedUrl("/registration?error"));
     }
 
     @WithMockUser

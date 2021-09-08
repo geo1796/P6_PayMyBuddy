@@ -40,6 +40,15 @@
 
             <h1>Credit card transaction form</h1>
 
+            <div th:if="${param.error}">
+                <div class="alert alert-danger">
+                    <tr th:if="${errors.isEmpty()}">An error occurred</tr>
+                    <ul>
+                        <li th:each="error, stat : ${errors}" th:text="${error.defaultMessage}" class="error"/>
+                    </ul>
+                </div>
+            </div>
+
             <form th:action="@{/creditCardTransaction}" method="post" th:object="${creditCardTransaction}">
 
                 <div class="form-group">
@@ -64,7 +73,7 @@
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-success">Send</button>
-                    <span><a href="/" th:href="@{/transactions}">Transaction history</a></span>
+                    <span><a href="/" th:href="@{/creditCardTransactions}">Credit card transactions history</a></span>
                 </div>
 
             </form>

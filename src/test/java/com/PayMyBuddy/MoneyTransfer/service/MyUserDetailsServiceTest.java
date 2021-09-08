@@ -6,6 +6,7 @@ import com.PayMyBuddy.MoneyTransfer.model.User;
 import com.PayMyBuddy.MoneyTransfer.repository.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MyUserDetailsServiceTest {
 
     @Mock
@@ -29,16 +31,16 @@ public class MyUserDetailsServiceTest {
     @InjectMocks
     MyUserDetailsService myUserDetailsService;
 
-    private static User user;
-    private static Role role;
-    private static UserDto userDto;
+    private User user;
+    private Role role;
+    private UserDto userDto;
 
     private Collection < ? extends GrantedAuthority> mapRolesToAuthorities(Collection <Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
 
     @BeforeAll
-    public static void init(){
+    public void init(){
         role = new Role();
         role.setName("ROLE_USER");
         Set<Role> roleCollection = new HashSet<>(Collections.emptySet());
