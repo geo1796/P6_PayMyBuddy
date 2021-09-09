@@ -1,6 +1,7 @@
-package com.PayMyBuddy.MoneyTransfer.controller;
+package com.PayMyBuddy.MoneyTransfer.integration.controller;
 
 import com.PayMyBuddy.MoneyTransfer.dto.TransactionDto;
+import com.PayMyBuddy.MoneyTransfer.service.MyUserDetailsService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -30,7 +31,7 @@ public class TransactionControllerIT {
     @BeforeAll
     public void init(){
         transactionDto = new TransactionDto();
-        transactionDto.setCurrencyCode("EUR");
+        transactionDto.setCurrencyCode("GBP");
         transactionDto.setReceiverEmail("john.doe@mail.com");
     }
 
@@ -54,7 +55,7 @@ public class TransactionControllerIT {
     @WithMockUser(username = "son.goku@mail.com")
     @Test
     public void testAddTransaction() throws Exception{
-        transactionDto.setAmount(100);
+        transactionDto.setAmount(100.);
         mockMvc.perform(post("/transaction")
                 .flashAttr("transaction", transactionDto))
                 .andExpect(redirectedUrl("/transaction?success"));

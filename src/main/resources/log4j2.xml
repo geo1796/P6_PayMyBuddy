@@ -20,7 +20,7 @@
 
     <Loggers>
 
-        <Root level="info">
+        <Root level="debug">
 
             <AppenderRef ref="stdout" />
             <AppenderRef ref="rollingFile" />

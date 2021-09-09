@@ -1,10 +1,6 @@
-package com.PayMyBuddy.MoneyTransfer.controller;
+package com.PayMyBuddy.MoneyTransfer.integration.controller;
 
-import com.PayMyBuddy.MoneyTransfer.dto.CreditCardDto;
 import com.PayMyBuddy.MoneyTransfer.dto.CreditCardTransactionDto;
-import com.PayMyBuddy.MoneyTransfer.model.CreditCard;
-import com.PayMyBuddy.MoneyTransfer.model.CreditCardTransaction;
-import com.PayMyBuddy.MoneyTransfer.model.User;
 import com.PayMyBuddy.MoneyTransfer.service.MyUserDetailsService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -30,8 +26,6 @@ public class CreditCardTransactionControllerIT {
 
     @Autowired
     MockMvc mockMvc;
-    @Autowired
-    MyUserDetailsService myUserDetailsService;
 
     private CreditCardTransactionDto creditCardTransactionDto;
 

@@ -49,24 +49,29 @@
   </p>
 </div>
 
-<div >
-  <a th:href="@{/contacts}">My contacts</a>
-</div>
 <div>
-  <a th:href="@{/transactions}">My transactions</a>
+<ul>
+  <li>
+ <button> <a th:href="@{/contacts}">My contacts</a> </button>
+</li>
+<li>
+  <button> <a th:href="@{/transactions}">My transactions</a> </button>
+</li>
+<li>
+  <button> <a th:href="@{/bankAccounts}">My bank accounts</a> </button>
+</li>
+<li>
+  <button> <a th:href="@{/bankAccountTransactions}">My bank account transactions</a> </button>
+</li>
+<li>
+  <button> <a th:href="@{/creditCards}">My credit cards</a> </button>
+</li>
+<li>
+  <button> <a th:href="@{/creditCardTransactions}">My credit card transactions</a> </button>
+</li>
+</ul>
 </div>
-<div>
-  <a th:href="@{/bankAccounts}">My bank accounts</a>
-</div>
-<div>
-  <a th:href="@{/bankAccountTransactions}">My bank account transactions</a>
-</div>
-<div>
-  <a th:href="@{/creditCards}">My credit cards</a>
-</div>
-<div>
-  <a th:href="@{/creditCardTransactions}">My credit card transactions</a>
-</div>
+
 <div>
   <button><td class="align-middle" th:text="${#numbers.formatDecimal(user.balance,2,2)}"></td>
     <td class="align-middle" th:text="${user.balanceCurrencyCode}"></td></button>

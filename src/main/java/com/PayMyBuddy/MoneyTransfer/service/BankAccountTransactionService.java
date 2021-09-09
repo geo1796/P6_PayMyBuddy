@@ -30,7 +30,6 @@ public class BankAccountTransactionService {
     private BankAccountTransactionRepository bankAccountTransactionRepository;
     private MyUserDetailsService myUserDetailsService;
     private BankAccountTransactionMapper bankAccountTransactionMapper;
-    private UserRepository userRepository;
 
     public List<BankAccountTransaction> findAll() {
         return bankAccountTransactionRepository.findAll();
@@ -59,17 +58,15 @@ public class BankAccountTransactionService {
             BankAccount bankAccount = optionalBankAccount.get();
 
                 User user = myUserDetailsService.findUser();
-                BankAccountTransaction bankAccountTransaction = bankAccountTransactionMapper.toEntity(bankAccountTransactionDto, user, bankAccount);
-                bankAccountTransactionRepository.save(bankAccountTransaction);
-
-                if (bankAccountTransaction.getToBalance())
+                if (bankAccountTransactionDto.getToBalance())
                     user.setBalance(user.getBalance() + CurrencyConverter.convert(
-                            bankAccountTransaction.getCurrencyCode(), user.getBalanceCurrencyCode(), transactionAmount));
+                            bankAccountTransactionDto.getCurrencyCode(), user.getBalanceCurrencyCode(), transactionAmount));
                 else{
                     double usersBalance = user.getBalance();
-                    if (usersBalance > transactionAmount)
+                    if (usersBalance > transactionAmount) {
                         user.setBalance(user.getBalance() - CurrencyConverter.convert(
-                                user.getBalanceCurrencyCode(), bankAccountTransaction.getCurrencyCode(), bankAccountTransaction.getAmount()));
+                                bankAccountTransactionDto.getCurrencyCode(), user.getBalanceCurrencyCode(), transactionAmount));
+                    }
                     else{
                         result.reject("bankAccountTransaction", "not enough money on this Pay My Buddy account to proceed transaction");
                         logger.error("not enough money on this Pay My Buddy account to proceed transaction");
@@ -77,7 +74,9 @@ public class BankAccountTransactionService {
                     }
                 }
 
-                userRepository.save(user);
+            BankAccountTransaction bankAccountTransaction = bankAccountTransactionMapper.toEntity(bankAccountTransactionDto, user, bankAccount);
+            bankAccountTransactionRepository.save(bankAccountTransaction);
+            myUserDetailsService.save(user);
 
         }
         else {

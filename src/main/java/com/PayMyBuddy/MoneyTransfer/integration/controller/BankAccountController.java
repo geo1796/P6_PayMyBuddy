@@ -1,4 +1,4 @@
-package com.PayMyBuddy.MoneyTransfer.controller;
+package com.PayMyBuddy.MoneyTransfer.integration.controller;
 
 import com.PayMyBuddy.MoneyTransfer.dto.BankAccountDto;
 import com.PayMyBuddy.MoneyTransfer.model.BankAccount;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -35,7 +35,7 @@ public class BankAccountController {
     public String showBankAccounts(Model model){
         logger.info("calling method : showBankAccounts");
 
-        ArrayList<BankAccountDto> bankAccounts = bankAccountService.findAllDtos();
+        HashSet<BankAccountDto> bankAccounts = (HashSet<BankAccountDto>) bankAccountService.findAllDtos();
         model.addAttribute("bankAccounts", bankAccounts);
 
         return "bank-accounts";

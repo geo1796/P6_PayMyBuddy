@@ -1,4 +1,4 @@
-package com.PayMyBuddy.MoneyTransfer.controller;
+package com.PayMyBuddy.MoneyTransfer.integration.controller;
 
 import com.PayMyBuddy.MoneyTransfer.service.MyUserDetailsService;
 import lombok.AllArgsConstructor;

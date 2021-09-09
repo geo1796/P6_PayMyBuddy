@@ -37,7 +37,7 @@ public class TransactionService {
     public void addTransaction(TransactionDto transactionDto, BindingResult result) {
         double transactionAmount = transactionDto.getAmount();
         if (transactionAmount <= 0.) {
-            logger.error("transaction can't be null");
+            logger.error("amount can't be null");
             result.reject("transaction", "transaction can't be null");
             return;
         }
@@ -81,7 +81,7 @@ public class TransactionService {
 
         //updating users balances
         sender.setBalance(sender.getBalance() - CurrencyConverter.convert(
-                senderCurrencyCode, transactionCurrencyCode, transactionAmount + fee));
+                transactionCurrencyCode, senderCurrencyCode, transactionAmount + fee));
         myUserDetailsService.save(sender);
 
         receiver.setBalance(receiver.getBalance() + CurrencyConverter.convert(
@@ -92,10 +92,9 @@ public class TransactionService {
 
 
     public ArrayList<TransactionDto> getTransactionAsSenderDtos() {
-        User user = myUserDetailsService.findUser();
         ArrayList<TransactionDto> result = new ArrayList<>();
 
-        user.getTransactionsAsSender().forEach(
+        myUserDetailsService.findUser().getTransactionsAsSender().forEach(
                 transaction -> result.add(transactionMapper.toDto(transaction))
         );
 
@@ -103,10 +102,9 @@ public class TransactionService {
     }
 
     public ArrayList<TransactionDto> getTransactionAsReceiverDtos() {
-        User user = myUserDetailsService.findUser();
         ArrayList<TransactionDto> result = new ArrayList<>();
 
-        user.getTransactionsAsReceiver().forEach(
+        myUserDetailsService.findUser().getTransactionsAsReceiver().forEach(
                 transaction -> result.add(transactionMapper.toDto(transaction))
         );
 

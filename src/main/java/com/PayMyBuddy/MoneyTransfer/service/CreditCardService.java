@@ -47,15 +47,17 @@ public class CreditCardService {
         Set<CreditCard> usersCreditCards = user.getCreditCards();
 
         if(optionalCreditCard.isPresent()) {
+            logger.info("this credit card is already in db");
             CreditCard alreadyInDbCreditCard = optionalCreditCard.get();
 
-            if (usersCreditCards.contains(alreadyInDbCreditCard)){
+            if (usersCreditCards.contains(alreadyInDbCreditCard)){ //checking if this creditCard is already linked to this account
                 logger.error("this credit card is already linked to this pay my buddy account");
                 result.reject("creditCard", "this credit card is already linked to this pay my buddy account");
             }
             else{
                 usersCreditCards.add(alreadyInDbCreditCard);
                 myUserDetailsService.save(user);
+                logger.info("credit card successfully added");
             }
         }
         else{
@@ -64,6 +66,7 @@ public class CreditCardService {
                 creditCardRepository.save(newCreditCard);
                 usersCreditCards.add(newCreditCard);
                 myUserDetailsService.save(user);
+                logger.info("credit card successfully added");
             }
             catch (DataIntegrityViolationException e){
                 logger.error(e.getMessage());
@@ -77,10 +80,9 @@ public class CreditCardService {
     }
 
     public Set<CreditCardDto> findCreditCardDtos() {
-        User user = myUserDetailsService.findUser();
         HashSet<CreditCardDto> result = new HashSet<>();
 
-        user.getCreditCards().forEach(
+        myUserDetailsService.findUser().getCreditCards().forEach(
                 creditCard -> result.add(creditCardMapper.toDto(creditCard))
         );
 

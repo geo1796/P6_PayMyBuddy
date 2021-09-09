@@ -1,4 +1,4 @@
-package com.PayMyBuddy.MoneyTransfer.controller;
+package com.PayMyBuddy.MoneyTransfer.integration.controller;
 
 import com.PayMyBuddy.MoneyTransfer.dto.BankAccountTransactionDto;
 import com.PayMyBuddy.MoneyTransfer.service.BankAccountService;
@@ -42,7 +42,7 @@ public class BankAccountTransactionController {
     public String showBankAccountTransactionForm(Model model){
         logger.info("calling method : showBankAccountTransactionForm");
 
-        model.addAttribute("bankAccounts", bankAccountService.findBankAccountDtos());
+        model.addAttribute("bankAccounts", bankAccountService.findAllDtos());
         model.addAttribute("errors", errors);
 
         return "bank-account-transaction-form";

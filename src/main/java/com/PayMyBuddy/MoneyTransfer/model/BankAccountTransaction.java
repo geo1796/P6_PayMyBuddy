@@ -26,8 +26,8 @@ public class BankAccountTransaction {
     @Column(name = "currency_code")
     private String currencyCode;
 
-    @Column(name = "to_balance")
-    private Boolean toBalance;
+    @Column(name = "to_balance") // true means the money is sent from the bank account
+    private Boolean toBalance;   // to the PayMyBuddy account and false means the opposite
 
     @ManyToOne
     @JoinColumn(name = "user_id")

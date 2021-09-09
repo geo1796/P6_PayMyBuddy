@@ -7,7 +7,6 @@ import com.PayMyBuddy.MoneyTransfer.model.CreditCardTransaction;
 import com.PayMyBuddy.MoneyTransfer.model.User;
 import com.PayMyBuddy.MoneyTransfer.repository.CreditCardRepository;
 import com.PayMyBuddy.MoneyTransfer.repository.CreditCardTransactionRepository;
-import com.PayMyBuddy.MoneyTransfer.repository.UserRepository;
 import com.PayMyBuddy.MoneyTransfer.util.CurrencyConverter;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -28,7 +27,6 @@ public class CreditCardTransactionService {
     private CreditCardTransactionRepository creditCardTransactionRepository;
     private CreditCardTransactionMapper creditCardTransactionMapper;
     private MyUserDetailsService myUserDetailsService;
-    private UserRepository userRepository;
     private CreditCardRepository creditCardRepository;
     private static final Logger logger = LogManager.getLogger("CreditCardTransactionService");
 
@@ -45,7 +43,7 @@ public class CreditCardTransactionService {
     public void addCreditCardTransaction(CreditCardTransactionDto creditCardTransactionDto, BindingResult result) {
         double transactionAmount = creditCardTransactionDto.getAmount();
         if(transactionAmount <= 0.){
-            result.rejectValue("amount", "transaction can't be null");
+            result.reject("creditCardTransaction", "transaction can't be null");
             logger.error("transaction can't be null");
             return;
         }
@@ -60,7 +58,7 @@ public class CreditCardTransactionService {
                 creditCardTransactionRepository.save(creditCardTransaction);
                 user.setBalance(user.getBalance() + CurrencyConverter.convert(
                         creditCardTransactionDto.getCurrencyCode(), user.getBalanceCurrencyCode(), transactionAmount));
-                userRepository.save(user);
+                myUserDetailsService.save(user);
             }
             else {
                 result.reject("creditCardTransaction", "this credit card is expired");

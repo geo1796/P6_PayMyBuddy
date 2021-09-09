@@ -1,7 +1,8 @@
-package com.PayMyBuddy.MoneyTransfer.controller;
+package com.PayMyBuddy.MoneyTransfer.integration.controller;
 
 import com.PayMyBuddy.MoneyTransfer.dto.BankAccountTransactionDto;
 import com.PayMyBuddy.MoneyTransfer.model.BankAccountTransaction;
+import com.PayMyBuddy.MoneyTransfer.service.MyUserDetailsService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -70,11 +71,11 @@ public class BankAccountTransactionControllerIT {
                 .andExpect(redirectedUrl("/bankAccountTransaction?success"));
     }
 
-    @WithMockUser(username = "john.doe@mail.com")
+    @WithMockUser(username = "son.goku@mail.com")
     @Test
-    public void testAddBankAccountTransaction() throws Exception {
-        bankAccountTransactionDto.setToBalance(true);
-        bankAccountTransactionDto.setCurrencyCode("EUR");
+    public void testFromBalanceToBankAccount() throws Exception {
+        bankAccountTransactionDto.setToBalance(false);
+        bankAccountTransactionDto.setCurrencyCode("GBP");
         bankAccountTransactionDto.setAmount(10);
         bankAccountTransactionDto.setIban("ibanTest");
 
