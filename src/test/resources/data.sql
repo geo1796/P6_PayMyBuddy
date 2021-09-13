@@ -1,5 +1,5 @@
 INSERT INTO User (user_id, password, email, balance, balance_currency_code)
-VALUES (1, '$2a$12$7mx1cpN4PfBZ0BCAulbD/OknUSL.04TjPVTmysiTzW71w1sV5Tq3q', 'john.doe@mail.com', 0, 'EUR');
+VALUES (1, '$2a$12$7mx1cpN4PfBZ0BCAulbD/OknUSL.04TjPVTmysiTzW71w1sV5Tq3q', 'john.doe@mail.com', 2, 'EUR');
 
 INSERT INTO User (user_id, password, email, balance, balance_currency_code)
 VALUES (2, '$2a$12$Tq6O6Vr57KzLI/Ymur4uMev14I1XArW5CripfV/smg7qLWaDADoXq', 'son.goku@mail.com', 200, 'USD');

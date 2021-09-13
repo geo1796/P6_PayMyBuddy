@@ -1,4 +1,4 @@
-package com.PayMyBuddy.MoneyTransfer.integration.controller;
+package com.PayMyBuddy.MoneyTransfer.controller;
 
 import com.PayMyBuddy.MoneyTransfer.dto.CreditCardTransactionDto;
 import com.PayMyBuddy.MoneyTransfer.service.CreditCardService;

@@ -1,4 +1,4 @@
-package com.PayMyBuddy.MoneyTransfer.integration.controller;
+package com.PayMyBuddy.MoneyTransfer.controller;
 
 import com.PayMyBuddy.MoneyTransfer.dto.UserRegistrationDto;
 import com.PayMyBuddy.MoneyTransfer.model.User;

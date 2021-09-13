@@ -54,13 +54,7 @@
                 <div class="form-group">
                     <label class="control-label"> Amount </label> <input
                         id="amount" class="form-control" type="number" step=".01"
-                        th:field="*{amount}" required autofocus="autofocus" />
-                </div>
-
-                <div class="form-group">
-                    <select th:field="*{receiverEmail}">
-                        <option th:each="contact, stat : ${contactList}" th:value="${contact.email}" th:text="${contact.email}"></option>
-                    </select>
+                        th:field="*{amount}" required autofocus="autofocus"/>
                 </div>
 
                 <div class="form-group">
@@ -72,6 +66,18 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="control-label" for="receiverEmail"> Receiver email </label> <input
+                        id="receiverEmail" class="form-control" th:field="*{receiverEmail}" required
+                        autofocus="autofocus" />
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="description"> Description </label> <input
+                        id="description" class="form-control" th:field="*{description}" required
+                        autofocus="autofocus" />
+                </div>
+
+                <div class="form-group">
                     <button type="submit" class="btn btn-success">Send</button>
                     <span><a href="/" th:href="@{/transactions}">Transaction history</a></span>
                 </div>
@@ -79,6 +85,57 @@
             </form>
         </div>
     </div>
+    <div class="py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-left">
+                    <h5 class="">My Transactions<br></h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="py-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 bg-success">
+                    <h6 class="text-center">Sender<br></h6>
+                </div>
+                <div class="col-md-3 bg-success">
+                    <h6 class="text-center">Receiver<br></h6>
+                </div>
+                <div class="col-md-3 bg-success">
+                    <h6 class="text-center bg-success">Description</h6>
+                </div>
+                <div class="col-md-3 bg-success">
+                    <h6 class="text-center">Amount<br></h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="">
+        <div class="container">
+            <div class="row" data-th-each="transaction : ${ transactionPage.content }">
+                <br>
+                <div class="col-md-3 text-center" data-th-text="${ transaction.senderEmail}"></div>
+                <div class="col-md-3 text-center" data-th-text="${ transaction.receiverEmail}"></div>
+                <div class="col-md-3 text-center" data-th-text="${ transaction.description }"></div>
+                <div class="col-md-3 text-center"
+                     data-th-text="${ transaction.amount + ' ' + transaction.currencyCode}"></div>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <div class="text-center">
+        <div th:if="${transactionPage.totalPages > 0}" class="pagination"
+             th:each="pageNumber : ${pageNumbers}">
+            <a th:href="@{/transaction(size=${transactionPage.size}, page=${pageNumber})}"
+               th:text=${pageNumber}
+               th:class="${pageNumber==transactionPage.number + 1} ? active"></a>
+        </div>
+    </div>
+
 </div>
 </body>
 </html>

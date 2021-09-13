@@ -92,8 +92,14 @@ public class MyUserDetailsService implements UserDetailsService {
 
     public void addContact(ContactDto contactDto, BindingResult result) {
         User user = findUser();
-
         String contactEmail = contactDto.getEmail();
+
+        if (Objects.equals(user.getEmail(), contactEmail)){
+            result.rejectValue("email", null, "You can't add yourself to your contact list");
+            logger.error("You can't add yourself to your contact list");
+            return;
+        }
+
         Optional<User> optionalContactUser = userRepository.findByEmail(contactEmail);
         if (optionalContactUser.isPresent()) {
             User newContact = optionalContactUser.get();

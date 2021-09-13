@@ -2,79 +2,103 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-  <meta charset="ISO-8859-1">
-  <title>Registration and Login App</title>
+    <meta charset="ISO-8859-1">
+    <title>Pay My Buddy home</title>
 
-  <link rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-        crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
 
 </head>
 <body>
 <!-- create navigation bar ( header) -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed"
-              data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-              aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span> <span
-              class="icon-bar"></span> <span class="icon-bar"></span> <span
-              class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#" th:href="@{/}">Registration and
-        Login Module</a>
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span> <span
+                    class="icon-bar"></span> <span class="icon-bar"></span> <span
+                    class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" th:href="@{/}">Pay My Buddy</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </div>
     </div>
-    <div id="navbar" class="collapse navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
-      </ul>
-    </div>
-  </div>
 </nav>
 
 <br>
 <br>
 
 <div class="container">
-  <h1>Registration and Login with Spring Boot, Spring Security,
-    Thymeleaf, Hibernate and MySQL</h1>
-  Welcome <span sec:authentication="principal.username"> User</span>
-</div>
-<div sec:authorize="hasRole('ROLE_ADMIN')">
-  <h3>You will see this only if you are ADMIN</h3>
-  <p>
-    <a th:href="@{/admin}">Admin Home</a>
-  </p>
-</div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
 
-<div>
-<ul>
-  <li>
- <button> <a th:href="@{/contacts}">My contacts</a> </button>
-</li>
-<li>
-  <button> <a th:href="@{/transactions}">My transactions</a> </button>
-</li>
-<li>
-  <button> <a th:href="@{/bankAccounts}">My bank accounts</a> </button>
-</li>
-<li>
-  <button> <a th:href="@{/bankAccountTransactions}">My bank account transactions</a> </button>
-</li>
-<li>
-  <button> <a th:href="@{/creditCards}">My credit cards</a> </button>
-</li>
-<li>
-  <button> <a th:href="@{/creditCardTransactions}">My credit card transactions</a> </button>
-</li>
-</ul>
-</div>
+            <div class="form-group">
+                <h1>Send money to your friends easily.</h1>
+                Welcome <span sec:authentication="principal.username">User</span>
+                <br>you have
+                <button>
+                    <td class="align-middle" th:text="${#numbers.formatDecimal(user.balance,2,2)}"></td>
+                    <td class="align-middle" th:text="${user.balanceCurrencyCode}"></td>
+                </button>
+                on your Pay My Buddy account.
+            </div>
+            <!--
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <h3>You will see this only if you are ADMIN</h3>
+                <p>
+                    <a th:href="@{/admin}">Admin Home</a>
+                </p>
+            </div>
+            -->
 
-<div>
-  <button><td class="align-middle" th:text="${#numbers.formatDecimal(user.balance,2,2)}"></td>
-    <td class="align-middle" th:text="${user.balanceCurrencyCode}"></td></button>
+            <div>
+                <ul>
+                    <div class="form-group">
+                        <li>
+                            <button><a th:href="@{/contacts}">My contacts</a></button>
+                        </li>
+                    </div>
+                    <div class="form-group">
+                        <li>
+                            <button><a th:href="@{/transactions}">My transactions</a></button>
+                        </li>
+                    </div>
+                    <div class="form-group">
+                        <li>
+                            <button><a th:href="@{/bankAccounts}">My bank accounts</a></button>
+                        </li>
+                    </div>
+                    <div class="form-group">
+                        <li>
+                            <button><a th:href="@{/bankAccountTransactions}">My bank account transactions</a></button>
+                        </li>
+                    </div>
+                    <div class="form-group">
+                        <li>
+                            <button><a th:href="@{/creditCards}">My credit cards</a></button>
+                        </li>
+                    </div>
+                    <div class="form-group">
+                        <li>
+                            <button><a th:href="@{/creditCardTransactions}">My credit card transactions</a></button>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+
+            <h2><button><a th:href="@{/transaction}">Send money to a friend</a></button></h2>
+            <h2><button><a th:href="@{/fundAccount}">Fund your Pay My Buddy account</a></button></h2>
+
+        </div>
+    </div>
 </div>
 </body>
 </html>

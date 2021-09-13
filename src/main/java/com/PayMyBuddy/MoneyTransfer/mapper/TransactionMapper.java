@@ -14,7 +14,7 @@ public class TransactionMapper {
         result.setSenderEmail(transaction.getSender().getEmail());
         result.setAmount(transaction.getAmount());
         result.setCurrencyCode(transaction.getCurrencyCode());
-        result.setStartDate(transaction.getStartDate());
+        result.setEndDate(transaction.getEndDate());
         result.setDescription(transaction.getDescription());
 
         return result;

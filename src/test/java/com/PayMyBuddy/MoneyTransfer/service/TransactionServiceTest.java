@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -47,6 +48,10 @@ public class TransactionServiceTest {
         receiver.setBalanceCurrencyCode("EUR");
         transactionDto.setReceiverEmail(receiver.getEmail());
         transactionDto.setCurrencyCode("EUR");
+
+        HashSet<User> contacts = new HashSet<>();
+        contacts.add(receiver);
+        sender.setContacts(contacts);
     }
 
     @BeforeEach()
@@ -66,6 +71,7 @@ public class TransactionServiceTest {
 
     @Test
     public void testAddTransactionWithoutReceiver(){
+        when(myUserDetailsService.findUser()).thenReturn(sender);
         when(myUserDetailsService.findByEmail(receiver.getEmail())).thenReturn(Optional.empty());
         transactionService.addTransaction(transactionDto, result);
         assertTrue(result.hasErrors());

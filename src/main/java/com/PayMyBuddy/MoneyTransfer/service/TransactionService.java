@@ -11,11 +11,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
-import java.sql.Date;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
@@ -31,7 +33,7 @@ public class TransactionService {
     }
 
     private double calculateFee(double transactionAmount) {
-        return transactionAmount * 0.02;
+        return transactionAmount * 0.005;
     }
 
     public void addTransaction(TransactionDto transactionDto, BindingResult result) {
@@ -43,14 +45,28 @@ public class TransactionService {
         }
 
         User sender = myUserDetailsService.findUser();
-        Optional<User> optionalReceiver = myUserDetailsService.findByEmail(transactionDto.getReceiverEmail());
+        boolean isInContactList = false;
 
-        if (optionalReceiver.isEmpty()) {
-            logger.error("No account for this email");
-            result.reject("transaction", "No account for this email");
+        for(User contact : sender.getContacts()){
+            if(Objects.equals(contact.getEmail(), transactionDto.getReceiverEmail())) {
+                isInContactList = true;
+                break;
+            }
+        }
+
+        if(!isInContactList){
+            result.reject("transaction", "this email is not in the contact list");
+            logger.error("this email is not in the contact list");
             return;
         }
 
+        Optional<User> optionalReceiver = myUserDetailsService.findByEmail(transactionDto.getReceiverEmail());
+
+        if (optionalReceiver.isEmpty()){
+            result.reject("transaction", "there is not account with this email");
+            logger.error("there is not account with this email");
+            return;
+        }
         User receiver = optionalReceiver.get();
 
         double fee = calculateFee(transactionAmount);
@@ -110,4 +126,30 @@ public class TransactionService {
 
         return result;
     }
+
+    public Page<TransactionDto> findPaginated(Pageable pageable, List<TransactionDto> transactionDtos){
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<TransactionDto> list;
+
+        if(transactionDtos.size() < startItem)
+            list = Collections.emptyList();
+        else{
+            int toIndex = Math.min(startItem + pageSize, transactionDtos.size());
+            list = transactionDtos.subList(startItem, toIndex);
+            Collections.sort(list);
+        }
+
+        return new PageImpl<>(list, PageRequest.of(currentPage, pageSize), transactionDtos.size());
+    }
+
+    public List<TransactionDto> getAllTransactionDtos() {
+        ArrayList<TransactionDto> result = new ArrayList<>();
+        result.addAll(getTransactionAsReceiverDtos());
+        result.addAll(getTransactionAsSenderDtos());
+
+        return result;
+    }
 }
+

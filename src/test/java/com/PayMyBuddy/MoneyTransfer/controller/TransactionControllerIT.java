@@ -1,4 +1,4 @@
-package com.PayMyBuddy.MoneyTransfer.integration.controller;
+package com.PayMyBuddy.MoneyTransfer.controller;
 
 import com.PayMyBuddy.MoneyTransfer.dto.TransactionDto;
 import com.PayMyBuddy.MoneyTransfer.service.MyUserDetailsService;
@@ -32,7 +32,6 @@ public class TransactionControllerIT {
     public void init(){
         transactionDto = new TransactionDto();
         transactionDto.setCurrencyCode("GBP");
-        transactionDto.setReceiverEmail("john.doe@mail.com");
     }
 
     @WithMockUser(username = "john.doe@mail.com")
@@ -52,10 +51,11 @@ public class TransactionControllerIT {
                 .andExpect(model().attribute("transactionsAsReceiver", hasItem(hasProperty("description", equalTo("From Son Goku to John Doe")))));
     }
 
-    @WithMockUser(username = "son.goku@mail.com")
+    @WithMockUser(username = "john.doe@mail.com")
     @Test
     public void testAddTransaction() throws Exception{
-        transactionDto.setAmount(100.);
+        transactionDto.setReceiverEmail("son.goku@mail.com");
+        transactionDto.setAmount(1.);
         mockMvc.perform(post("/transaction")
                 .flashAttr("transaction", transactionDto))
                 .andExpect(redirectedUrl("/transaction?success"));
@@ -64,6 +64,7 @@ public class TransactionControllerIT {
     @WithMockUser(username = "son.goku@mail.com")
     @Test
     public void testAddTransactionWithoutEnoughMoney() throws Exception{
+        transactionDto.setReceiverEmail("john.doe@mail.com");
         transactionDto.setAmount(200);
         mockMvc.perform(post("/transaction")
                         .flashAttr("transaction", transactionDto))
