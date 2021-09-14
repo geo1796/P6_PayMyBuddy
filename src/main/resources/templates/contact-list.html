@@ -25,6 +25,13 @@
             </button>
             <a class="navbar-brand" href="#" th:href="@{/}">Pay My Buddy</a>
         </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/transaction}">Send Money</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/fundAccount}">Fund my account</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </div>
     </div>
 </nav>
 
@@ -50,23 +57,18 @@
 
             <br><br>
 
-            <div class="py-2">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-3 bg-success">
-                            <h5 class="text-center">Contacts emails<br></h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="">
-                <div class="container">
-                    <div class="row" data-th-each="creditCard : ${ creditCards }">
-                        <div class="col-md-3 text-center" data-th-text="${ creditCard.cardNumber }"></div>
-                    </div>
-                </div>
-            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Contact email</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-th-each="contact : ${ contactList }">
+                    <td data-th-text="${ contact.email }"></td>
+                </tr>
+                </tbody>
+            </table>
 
             <br>
             <div class="form-group">

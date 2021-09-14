@@ -25,6 +25,13 @@
             </button>
             <a class="navbar-brand" href="#" th:href="@{/}">Pay My Buddy</a>
         </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/transaction}">Send Money</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/fundAccount}">Fund my account</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </div>
     </div>
 </nav>
 
@@ -68,8 +75,8 @@
 
             <br>
             <div class="form-group">
-                <span>Add a new bank account ? <a th:href="@{/addBankAccount}">Click here</a></span><br>
-                <span>Fund your Pay My Buddy account using one of your bank accounts ? <a th:href="@{/bankAccountTransaction}">Click here</a> </span><br>
+                <span>Add a new bank account ? <a th:href="@{/addBankAccount}">Click here</a></span><br><br>
+                <span>Fund your Pay My Buddy account using one of your bank accounts ? <a th:href="@{/bankAccountTransaction}">Click here</a> </span><br><br>
                 <span><a href="/" th:href="@{/bankAccountTransactions}">Bank account transactions history</a></span>
             </div>
         </div>

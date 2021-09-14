@@ -25,6 +25,13 @@
             </button>
             <a class="navbar-brand" href="#" th:href="@{/}">Pay My Buddy</a>
         </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/transaction}">Send Money</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/fundAccount}">Fund my account</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </div>
     </div>
 </nav>
 
@@ -44,29 +51,22 @@
                     </div>
                 </div>
             </div>
-            <div class="py-2">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-3 bg-success">
-                            <h6 class="text-center">Card number<br></h6>
-                        </div>
 
-                        <div class="col-md-3 bg-success">
-                            <h6 class="text-center">Amount<br></h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Card number</th>
+                    <th scope="col">Transaction amount</th>
 
-            <div class="">
-                <div class="container">
-                    <div class="row" data-th-each="transaction : ${ creditCardTransactions }">
-                        <div class="col-md-3 text-center" data-th-text="${ transaction.cardNumber }"></div>
-                        <div class="col-md-3 text-center"
-                             data-th-text="${#numbers.formatDecimal(transaction.amount,2,2) + ' ' + transaction.currencyCode}"></div><br><br>
-                    </div>
-                </div>
-            </div>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-th-each="transaction : ${ creditCardTransactions }">
+                    <td data-th-text="${ transaction.cardNumber }"></td>
+                    <td data-th-text="${#numbers.formatDecimal(transaction.amount,2,2) + ' ' + transaction.currencyCode}"></td>
+                </tr>
+                </tbody>
+            </table>
 
             <br>
             <div class="form-group">
