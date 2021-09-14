@@ -47,8 +47,8 @@ public class TransactionControllerIT {
     public void testShowTransactionHistory() throws Exception{
         mockMvc.perform(get("/transactions"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("transactionsAsSender", hasItem(hasProperty("description", equalTo("From John Doe to Son Goku")))))
-                .andExpect(model().attribute("transactionsAsReceiver", hasItem(hasProperty("description", equalTo("From Son Goku to John Doe")))));
+                .andExpect(model().attribute("transactions", hasItem(hasProperty("description", equalTo("From John Doe to Son Goku")))))
+                .andExpect(model().attribute("transactions", hasItem(hasProperty("description", equalTo("From Son Goku to John Doe")))));
     }
 
     @WithMockUser(username = "john.doe@mail.com")

@@ -48,12 +48,19 @@ public class CreditCardTransactionService {
             return;
         }
 
+        User user = myUserDetailsService.findUser();
+        if(user.getCreditCards().isEmpty()){
+            result.reject("creditCardTransaction", "You must link a credit card to your Pay My Buddy account to do this");
+            logger.error("You must link a credit card to your Pay My Buddy account to do this");
+            return;
+        }
+
         Optional<CreditCard> optionalCreditCard = creditCardRepository.findByCardNumber(creditCardTransactionDto.getCardNumber());
         if(optionalCreditCard.isPresent()) {
             CreditCard creditCard = optionalCreditCard.get();
 
             if(creditCard.getExpirationDate().after(Date.from(Instant.now()))) { //checking if this creditCard is expired
-                User user = myUserDetailsService.findUser();
+
                 CreditCardTransaction creditCardTransaction = creditCardTransactionMapper.toEntity(creditCardTransactionDto, user, creditCard);
                 creditCardTransactionRepository.save(creditCardTransaction);
                 user.setBalance(user.getBalance() + CurrencyConverter.convert(

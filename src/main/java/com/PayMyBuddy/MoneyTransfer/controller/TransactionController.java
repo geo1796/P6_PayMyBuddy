@@ -80,8 +80,7 @@ public class TransactionController {
     public String showTransactionHistory(Model model){
         logger.info("calling method : showTransactionHistory");
 
-        model.addAttribute("transactionsAsSender", transactionService.getTransactionAsSenderDtos());
-        model.addAttribute("transactionsAsReceiver", transactionService.getTransactionAsReceiverDtos());
+        model.addAttribute("transactions", transactionService.getAllTransactionDtos());
 
         return "transaction-history";
     }

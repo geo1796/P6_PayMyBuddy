@@ -2,13 +2,11 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="ISO-8859-1">
-    <title>Transactions history</title>
-
+    <title>Transaction history</title>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
           crossorigin="anonymous">
-
 </head>
 <body>
 
@@ -30,29 +28,51 @@
 
 <br>
 <br>
-<div class = "container">
-    <div class = "row">
-        <div class = "col-md-6 col-md-offset-3">
+<!-- Create HTML registration form -->
+<div class="container">
 
-            <h1> Your transactions as sender </h1>
-
-            <tr th:each="transaction, stat : ${transactionsAsSender}">
-                <button>amount : <td class="align-middle" th:text="${transaction.amount}"></td> <td class="align-middle" th:text="${transaction.currencyCode}"></td>
-                <br>receiver : <td class="align-middle" th:text="${transaction.receiverEmail}"></td></button>
-            </tr>
-
-            <h1> Your transactions as receiver </h1>
-
-            <tr th:each="transaction, stat : ${transactionsAsReceiver}">
-                <button>amount : <td class="align-middle" th:text="${transaction.amount}"></td> <td class="align-middle" th:text="${transaction.currencyCode}"></td>
-                <br>sender : <td class="align-middle" th:text="${transaction.senderEmail}"></button>
-            </tr>
-
-            <div class="form-group">
-                <span>Start a transaction ?<a href="/" th:href="@{/transaction}">Click here</a></span>
+    <div class="py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-left">
+                    <br><h3 class="">My Transactions</h3><br>
+                </div>
             </div>
         </div>
     </div>
+    <div class="py-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 bg-success">
+                    <h6 class="text-center">Sender<br></h6>
+                </div>
+                <div class="col-md-3 bg-success">
+                    <h6 class="text-center">Receiver<br></h6>
+                </div>
+                <div class="col-md-3 bg-success">
+                    <h6 class="text-center bg-success">Description</h6>
+                </div>
+                <div class="col-md-3 bg-success">
+                    <h6 class="text-center">Amount<br></h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="">
+        <div class="container">
+            <div class="row" data-th-each="transaction : ${ transactions }">
+                <br>
+                <div class="col-md-3 text-center" data-th-text="${ transaction.senderEmail}"></div>
+                <div class="col-md-3 text-center" data-th-text="${ transaction.receiverEmail}"></div>
+                <div class="col-md-3 text-center" data-th-text="${ transaction.description }"></div>
+                <div class="col-md-3 text-center"
+                     data-th-text="${#numbers.formatDecimal(transaction.amount,2,2) + ' ' + transaction.currencyCode}"></div>
+            </div>
+        </div>
+    </div>
+    <br>
+
 </div>
 </body>
 </html>

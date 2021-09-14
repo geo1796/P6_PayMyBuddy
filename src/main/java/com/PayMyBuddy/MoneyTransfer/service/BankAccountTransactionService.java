@@ -48,8 +48,15 @@ public class BankAccountTransactionService {
     public void addBankAccountTransaction(BankAccountTransactionDto bankAccountTransactionDto, BindingResult result) {
         double transactionAmount = bankAccountTransactionDto.getAmount();
         if(transactionAmount <= 0.){
-            result.rejectValue("amount", "transaction can't be null");
+            result.rejectValue("amount", null, "transaction can't be null");
             logger.error("transaction can't be null");
+            return;
+        }
+
+        User user = myUserDetailsService.findUser();
+        if (user.getBankAccounts().isEmpty()){
+            result.reject("bankAccountTransaction", "You must link a bank account to your Pay My Buddy to do this");
+            logger.error("You must link a bank account to your Pay My Buddy to do this");
             return;
         }
 
@@ -57,7 +64,6 @@ public class BankAccountTransactionService {
         if(optionalBankAccount.isPresent()) {
             BankAccount bankAccount = optionalBankAccount.get();
 
-                User user = myUserDetailsService.findUser();
                 if (bankAccountTransactionDto.getToBalance())
                     user.setBalance(user.getBalance() + CurrencyConverter.convert(
                             bankAccountTransactionDto.getCurrencyCode(), user.getBalanceCurrencyCode(), transactionAmount));

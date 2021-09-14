@@ -56,6 +56,10 @@ public class MyUserDetailsService implements UserDetailsService {
         return userRepository.findByEmail(userMail).orElse(null);
     }
 
+    public UserDto findUserDto(){
+        return userMapper.toDto(findUser());
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 

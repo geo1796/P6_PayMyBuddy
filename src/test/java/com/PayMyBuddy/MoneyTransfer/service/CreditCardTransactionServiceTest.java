@@ -6,8 +6,10 @@ import com.PayMyBuddy.MoneyTransfer.model.CreditCard;
 import com.PayMyBuddy.MoneyTransfer.model.User;
 import com.PayMyBuddy.MoneyTransfer.repository.CreditCardRepository;
 import com.PayMyBuddy.MoneyTransfer.repository.CreditCardTransactionRepository;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -24,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CreditCardTransactionServiceTest {
 
     @Mock
@@ -41,10 +44,19 @@ public class CreditCardTransactionServiceTest {
     private CreditCardTransactionDto creditCardTransactionDto;
     private CreditCard creditCard;
     private BindingResult result;
+    private User user;
 
+    @BeforeAll
+    public void setup(){
+        user = new User();
+        HashSet<CreditCard> usersCreditCards = new HashSet<>();
+        usersCreditCards.add(creditCard);
+        user.setCreditCards(usersCreditCards);
+        user.setBalanceCurrencyCode("EUR");
+    }
 
     @BeforeEach
-    public void setup(){
+    public void eachSetup(){
         result = new BeanPropertyBindingResult(creditCardTransactionDto, "creditCardTransaction");
         creditCardTransactionDto = new CreditCardTransactionDto();
         creditCardTransactionDto.setAmount(10.);
@@ -65,6 +77,7 @@ public class CreditCardTransactionServiceTest {
     @Test
     public void testAddCreditCardTransactionWithExpiredCreditCard() {
         creditCard.setExpirationDate(Date.valueOf("2000-01-01"));
+        when(myUserDetailsService.findUser()).thenReturn(user);
         when(creditCardRepository.findByCardNumber(creditCardTransactionDto.getCardNumber())).thenReturn(Optional.ofNullable(creditCard));
         creditCardTransactionService.addCreditCardTransaction(creditCardTransactionDto, result);
         assertTrue(result.hasErrors());
@@ -72,12 +85,6 @@ public class CreditCardTransactionServiceTest {
 
     @Test
     public void testAddCreditCardTransactionSuccess() {
-        User user = new User();
-        HashSet<CreditCard> usersCreditCards = new HashSet<>();
-        usersCreditCards.add(creditCard);
-        user.setCreditCards(usersCreditCards);
-        user.setBalanceCurrencyCode("EUR");
-
         when(myUserDetailsService.findUser()).thenReturn(user);
         when(creditCardRepository.findByCardNumber(creditCardTransactionDto.getCardNumber())).thenReturn(Optional.ofNullable(creditCard));
         creditCardTransactionService.addCreditCardTransaction(creditCardTransactionDto, result);

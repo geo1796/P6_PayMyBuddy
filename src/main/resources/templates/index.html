@@ -44,10 +44,7 @@
                 <h1>Send money to your friends easily.</h1>
                 Welcome <span sec:authentication="principal.username">User</span>
                 <br>you have
-                <button>
-                    <td class="align-middle" th:text="${#numbers.formatDecimal(user.balance,2,2)}"></td>
-                    <td class="align-middle" th:text="${user.balanceCurrencyCode}"></td>
-                </button>
+                    <td class="align-middle" th:text="${#numbers.formatDecimal(user.balance,2,2) + ' ' + user.balanceCurrencyCode}"></td>
                 on your Pay My Buddy account.
             </div>
             <!--
@@ -68,6 +65,16 @@
                     </div>
                     <div class="form-group">
                         <li>
+                            <button><a th:href="@{/transaction}">Send money to a friend</a></button>
+                        </li>
+                    </div>
+                    <div class="form-group">
+                        <li>
+                            <button><a th:href="@{/fundAccount}">Fund your Pay My Buddy account</a></button>
+                        </li>
+                    </div>
+                    <div class="form-group">
+                        <li>
                             <button><a th:href="@{/transactions}">My transactions</a></button>
                         </li>
                     </div>
@@ -78,25 +85,11 @@
                     </div>
                     <div class="form-group">
                         <li>
-                            <button><a th:href="@{/bankAccountTransactions}">My bank account transactions</a></button>
-                        </li>
-                    </div>
-                    <div class="form-group">
-                        <li>
                             <button><a th:href="@{/creditCards}">My credit cards</a></button>
-                        </li>
-                    </div>
-                    <div class="form-group">
-                        <li>
-                            <button><a th:href="@{/creditCardTransactions}">My credit card transactions</a></button>
                         </li>
                     </div>
                 </ul>
             </div>
-
-            <h2><button><a th:href="@{/transaction}">Send money to a friend</a></button></h2>
-            <h2><button><a th:href="@{/fundAccount}">Fund your Pay My Buddy account</a></button></h2>
-
         </div>
     </div>
 </div>

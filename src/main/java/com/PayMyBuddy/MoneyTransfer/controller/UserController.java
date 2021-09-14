@@ -59,4 +59,10 @@ public class UserController {
         return "contact-list";
     }
 
+    @GetMapping("/fundAccount")
+    public String fundAccount(){
+        logger.info("calling method : fundAccount");
+        return "fund-account";
+    }
+
 }

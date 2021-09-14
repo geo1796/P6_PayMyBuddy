@@ -33,17 +33,44 @@
 <div class = "container">
     <div class = "row">
         <div class = "col-md-6 col-md-offset-3">
-            <h1> Your bank account transactions </h1>
 
 
-            <tr th:each="transaction, stat : ${bankAccountTransactions}">
-                <button>amount : <td class="align-middle" th:text="${transaction.amount}"></td> <td class="align-middle" th:text="${transaction.currencyCode}"></td>
-                    <br>iban : <td class="align-middle" th:text="${transaction.iban}"></td></button>
-            </tr>
+            <div class="py-3">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-left">
+                            <h3 class="">My bank accounts transactions<br></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="py-2">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3 bg-success">
+                            <h6 class="text-center">Account iban<br></h6>
+                        </div>
 
+                        <div class="col-md-3 bg-success">
+                            <h6 class="text-center">Amount<br></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="">
+                <div class="container">
+                    <div class="row" data-th-each="transaction : ${ bankAccountTransactions }">
+                        <div class="col-md-3 text-center" data-th-text="${ transaction.iban }"></div>
+                        <div class="col-md-3 text-center"
+                             data-th-text="${#numbers.formatDecimal(transaction.amount,2,2) + ' ' + transaction.currencyCode}"></div><br><br>
+                    </div>
+                </div>
+            </div>
+
+            <br>
             <div class="form-group">
-                <span>Start a transaction between your Pay My Buddy account and one of your bank accounts ? <a href="/" th:href="@{/bankAccountTransaction}">Click here</a></span>
+                <span>Send money to your Pay My Buddy account with one of your bank accounts ? <a href="/" th:href="@{/bankAccountTransaction}">Click here</a></span>
             </div>
         </div>
     </div>

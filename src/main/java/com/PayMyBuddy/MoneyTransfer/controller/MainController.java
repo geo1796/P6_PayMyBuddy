@@ -19,7 +19,7 @@ public class MainController {
     @GetMapping("/")
     public String root(Model model) {
         logger.info("calling method : root");
-        model.addAttribute("user", myUserDetailsService.findUser());
+        model.addAttribute("user", myUserDetailsService.findUserDto());
         return "index";
     }
 

@@ -148,6 +148,7 @@ public class TransactionService {
         ArrayList<TransactionDto> result = new ArrayList<>();
         result.addAll(getTransactionAsReceiverDtos());
         result.addAll(getTransactionAsSenderDtos());
+        Collections.sort(result);
 
         return result;
     }

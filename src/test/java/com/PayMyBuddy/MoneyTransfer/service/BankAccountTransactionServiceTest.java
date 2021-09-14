@@ -50,6 +50,7 @@ public class BankAccountTransactionServiceTest {
         bankAccountTransactions.add(bankAccountTransaction);
         user.setBankAccountTransactions(bankAccountTransactions);
         bankAccountTransactionDto = new BankAccountTransactionDto(10, "EUR", "ibanTest", true);
+        user.setBankAccounts(new HashSet<>());
     }
 
     @Test
@@ -70,6 +71,7 @@ public class BankAccountTransactionServiceTest {
         bankAccountTransactionDto.setToBalance(false);
         user.setBalanceCurrencyCode("EUR");
         user.setBalance(0.);
+        user.getBankAccounts().add(bankAccount);
         when(myUserDetailsService.findUser()).thenReturn(user);
         when(bankAccountRepository.findByIban(anyString())).thenReturn(Optional.of(bankAccount));
 
@@ -84,6 +86,7 @@ public class BankAccountTransactionServiceTest {
 
         user.setBalance(20.);
         user.setBalanceCurrencyCode("EUR");
+        user.getBankAccounts().add(bankAccount);
         bankAccountTransactionDto.setToBalance(false);
         when(bankAccountTransactionMapper.toEntity(bankAccountTransactionDto, user, bankAccount)).thenReturn(bankAccountTransaction);
         when(myUserDetailsService.findUser()).thenReturn(user);
@@ -101,6 +104,7 @@ public class BankAccountTransactionServiceTest {
 
         bankAccountTransactionDto.setAmount(10000000.);
         user.setBalanceCurrencyCode("EUR");
+        user.getBankAccounts().add(bankAccount);
         when(bankAccountTransactionMapper.toEntity(bankAccountTransactionDto, user, bankAccount)).thenReturn(bankAccountTransaction);
         when(myUserDetailsService.findUser()).thenReturn(user);
         when(bankAccountRepository.findByIban(anyString())).thenReturn(Optional.of(bankAccount));

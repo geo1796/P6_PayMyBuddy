@@ -43,7 +43,7 @@ public class BankAccountTransactionControllerIT {
     public void testShowBankAccountsTransactions() throws Exception {
         bankAccountTransactionDto.setAmount(10);
         bankAccountTransactionDto.setIban("ibanTest");
-        bankAccountTransactionDto.setCurrencyCode("EUR");
+        bankAccountTransactionDto.setCurrencyCode("€");
         bankAccountTransactionDto.setToBalance(false);
         mockMvc.perform(get("/bankAccountTransactions"))
                 .andExpect(status().isOk())
@@ -71,12 +71,12 @@ public class BankAccountTransactionControllerIT {
                 .andExpect(redirectedUrl("/bankAccountTransaction?success"));
     }
 
-    @WithMockUser(username = "son.goku@mail.com")
+    @WithMockUser(username = "john.doe@mail.com")
     @Test
     public void testFromBalanceToBankAccount() throws Exception {
         bankAccountTransactionDto.setToBalance(false);
         bankAccountTransactionDto.setCurrencyCode("GBP");
-        bankAccountTransactionDto.setAmount(10);
+        bankAccountTransactionDto.setAmount(1);
         bankAccountTransactionDto.setIban("ibanTest");
 
         mockMvc.perform(post("/bankAccountTransaction")

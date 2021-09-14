@@ -49,12 +49,20 @@
                 </div>
             </div>
 
+            <div th:if="${bankAccounts.isEmpty()}">
+                <div class="alert alert-info">
+                    <td class="text-center" colspan="3">You don't have any bank account linked to your Pay My Buddy
+                        account.
+                    </td>
+                </div>
+            </div>
+
             <form th:action="@{/bankAccountTransaction}" method="post" th:object="${bankAccountTransaction}">
 
                 <div class="form-group">
                     <label class="control-label"> Amount </label> <input
                         id="amount" class="form-control" type="number" step=".01"
-                        th:field="*{amount}" required autofocus="autofocus" />
+                        th:field="*{amount}" required autofocus="autofocus"/>
                 </div>
 
                 <div class="form-group">
@@ -66,8 +74,10 @@
                 </div>
 
                 <div class="form-group">
+                    Account iban :
                     <select th:field="*{iban}">
-                        <option th:each="bankAccount, stat : ${bankAccounts}" th:value="${bankAccount.iban}" th:text="${bankAccount.iban}"></option>
+                        <option th:each="bankAccount, stat : ${bankAccounts}" th:value="${bankAccount.iban}"
+                                th:text="${bankAccount.iban}"></option>
                     </select>
                 </div>
 

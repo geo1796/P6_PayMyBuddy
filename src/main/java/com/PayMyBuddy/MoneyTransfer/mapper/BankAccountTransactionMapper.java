@@ -4,6 +4,7 @@ import com.PayMyBuddy.MoneyTransfer.dto.BankAccountTransactionDto;
 import com.PayMyBuddy.MoneyTransfer.model.BankAccount;
 import com.PayMyBuddy.MoneyTransfer.model.BankAccountTransaction;
 import com.PayMyBuddy.MoneyTransfer.model.User;
+import com.PayMyBuddy.MoneyTransfer.util.Currency;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,7 +14,7 @@ public class BankAccountTransactionMapper {
         BankAccountTransactionDto result = new BankAccountTransactionDto();
 
         result.setAmount(bankAccountTransaction.getAmount());
-        result.setCurrencyCode(bankAccountTransaction.getCurrencyCode());
+        result.setCurrencyCode(Currency.valueOf(bankAccountTransaction.getCurrencyCode()).symbol); //to display the symbol of the currency 
         result.setIban(bankAccountTransaction.getBankAccount().getIban());
         result.setToBalance(bankAccountTransaction.getToBalance());
 
