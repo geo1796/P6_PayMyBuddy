@@ -47,7 +47,12 @@
             </div>
         </div>
     </div>
-    <table class="table table-striped">
+
+    <tr th:if="${transactions.isEmpty()}">
+        <div class="alert alert-info">You don't have any transaction</div>
+    </tr>
+
+    <table class="table table-striped" th:if="${!transactions.isEmpty()}">
         <thead>
         <tr>
             <th scope="col">Sender email</th>

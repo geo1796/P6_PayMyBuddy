@@ -29,9 +29,4 @@ public class MainController {
         return "login";
     }
 
-    @GetMapping("/admin")
-    public String admin(Model model) {
-        logger.info("calling method : admin");
-        return "admin";
-    }
 }

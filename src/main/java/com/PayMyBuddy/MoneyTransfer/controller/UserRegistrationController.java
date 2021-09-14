@@ -39,14 +39,11 @@ public class UserRegistrationController {
     }
 
     @PostMapping
-    public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDto userDto,
+    public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDto registrationDto,
                                       BindingResult result) {
         logger.info("calling method : registerUserAccount");
+        myUserDetailsService.save(registrationDto, result);
 
-        Optional<User> optionalUser = myUserDetailsService.findByEmail(userDto.getEmail());
-        if (optionalUser.isPresent()) {
-            result.reject("user", "There is already an account registered with that email");
-        }
 
         if (result.hasErrors()) {
             errors = result.getAllErrors();
@@ -54,7 +51,7 @@ public class UserRegistrationController {
             return "redirect:/registration?error";
         }
 
-        myUserDetailsService.save(userDto);
+
         logger.info("user registration success");
         return "redirect:/registration?success";
     }

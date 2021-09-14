@@ -1,7 +1,9 @@
 package com.PayMyBuddy.MoneyTransfer.controller;
 
 import com.PayMyBuddy.MoneyTransfer.dto.UserRegistrationDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +23,17 @@ public class UserRegistrationControllerIT {
     @Autowired
     MockMvc mockMvc;
 
+    private UserRegistrationDto userRegistrationDto;
+
+    @BeforeEach
+    public void setup(){
+        userRegistrationDto = new UserRegistrationDto();
+        userRegistrationDto.setEmail("user@gmail.com");
+        userRegistrationDto.setConfirmEmail("user@gmail.com");
+        userRegistrationDto.setPassword("password");
+        userRegistrationDto.setConfirmPassword("password");
+    }
+
     @Test
     public void testShowRegistrationForm() throws Exception {
         mockMvc.perform(get("/registration")).andExpect(status().isOk());
@@ -29,12 +42,6 @@ public class UserRegistrationControllerIT {
     @WithMockUser
     @Test
     public void testRegisterUserAccountSuccess() throws Exception{
-        UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
-        userRegistrationDto.setEmail("user@gmail.com");
-        userRegistrationDto.setConfirmEmail("user@gmail.com");
-        userRegistrationDto.setPassword("password");
-        userRegistrationDto.setConfirmPassword("password");
-
         mockMvc.perform(post("/registration")
                 .flashAttr("user", userRegistrationDto))
                 .andExpect(redirectedUrl("/registration?success"));
@@ -51,12 +58,8 @@ public class UserRegistrationControllerIT {
     @WithMockUser
     @Test
     public void testRegistrationUserAccountWithAlreadyRegisteredEmail() throws Exception{
-        UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
-        userRegistrationDto.setEmail("son.goku@mail.com");
-        userRegistrationDto.setConfirmEmail("son.goku@mail.com");
-        userRegistrationDto.setPassword("password");
-        userRegistrationDto.setConfirmPassword("password");
-
+        userRegistrationDto.setEmail("john.doe@mail.com");
+        userRegistrationDto.setConfirmEmail("john.doe@mail.com");
         mockMvc.perform(post("/registration")
                 .flashAttr("user", userRegistrationDto))
                 .andExpect(redirectedUrl("/registration?error"));
@@ -65,12 +68,7 @@ public class UserRegistrationControllerIT {
     @WithMockUser
     @Test
     public void testRegistrationUserAccountWithWrongConfirmEmail() throws Exception{
-        UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
-        userRegistrationDto.setEmail("user1@mail.com");
-        userRegistrationDto.setConfirmEmail("user2@mail.com");
-        userRegistrationDto.setPassword("password");
-        userRegistrationDto.setConfirmPassword("password");
-
+        userRegistrationDto.setConfirmEmail("wrong");
         mockMvc.perform(post("/registration")
                 .flashAttr("user", userRegistrationDto))
                 .andExpect(redirectedUrl("/registration?error"));
@@ -79,12 +77,7 @@ public class UserRegistrationControllerIT {
     @WithMockUser
     @Test
     public void testRegistrationUserAccountWithWrongConfirmPassword() throws Exception{
-        UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
-        userRegistrationDto.setEmail("user1@mail.com");
-        userRegistrationDto.setConfirmEmail("user1@mail.com");
-        userRegistrationDto.setPassword("password");
-        userRegistrationDto.setConfirmPassword("password123");
-
+        userRegistrationDto.setConfirmPassword("wrong");
         mockMvc.perform(post("/registration")
                 .flashAttr("user", userRegistrationDto))
                 .andExpect(redirectedUrl("/registration?error"));

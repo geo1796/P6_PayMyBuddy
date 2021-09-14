@@ -52,7 +52,11 @@
                 </div>
             </div>
 
-            <table class="table table-striped">
+            <tr th:if="${bankAccountTransactions.isEmpty()}">
+                <div class="alert alert-info">You don't have any bank account transaction</div>
+            </tr>
+
+            <table class="table table-striped" th:if="${!bankAccountTransactions.isEmpty()}">
                 <thead>
                 <tr>
                     <th scope="col">Account iban</th>

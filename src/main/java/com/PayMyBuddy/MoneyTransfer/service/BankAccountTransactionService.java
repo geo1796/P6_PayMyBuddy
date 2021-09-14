@@ -48,7 +48,7 @@ public class BankAccountTransactionService {
     public void addBankAccountTransaction(BankAccountTransactionDto bankAccountTransactionDto, BindingResult result) {
         double transactionAmount = bankAccountTransactionDto.getAmount();
         if(transactionAmount <= 0.){
-            result.rejectValue("amount", null, "transaction can't be null");
+            result.rejectValue("amount", "transaction can't be null");
             logger.error("transaction can't be null");
             return;
         }

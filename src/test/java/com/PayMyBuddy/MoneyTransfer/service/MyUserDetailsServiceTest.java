@@ -78,7 +78,7 @@ public class MyUserDetailsServiceTest {
         BindingResult result = new BeanPropertyBindingResult(contact, "contact");
         myUserDetailsService.addContact(contact, result);
 
-        assertTrue(result.hasFieldErrors("email"));
+        assertTrue(result.hasErrors());
     }
 
     @Test
@@ -88,7 +88,7 @@ public class MyUserDetailsServiceTest {
         BindingResult result = new BeanPropertyBindingResult(contact, "contact");
         myUserDetailsService.addContact(contact, result);
 
-        assertTrue(result.hasFieldErrors("email"));
+        assertTrue(result.hasErrors());
     }
 
     @Test

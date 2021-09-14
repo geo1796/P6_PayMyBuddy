@@ -1,6 +1,5 @@
 package com.PayMyBuddy.MoneyTransfer.dto;
 
-import com.PayMyBuddy.MoneyTransfer.constraints.FieldMatch;
 import lombok.Generated;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +12,6 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @RequiredArgsConstructor
 @Generated
-@FieldMatch.List({
-        @FieldMatch(first = "password", second = "confirmPassword", message = "The password fields must match"),
-        @FieldMatch(first = "email", second = "confirmEmail", message = "The email fields must match")
-})
 public class UserRegistrationDto {
 
     @Email

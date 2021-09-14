@@ -79,15 +79,40 @@ public class MyUserDetailsService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
-    public User save(UserRegistrationDto registrationDto) {
+    public void save(UserRegistrationDto registrationDto, BindingResult result) {
+        Optional<User> optionalUser = findByEmail(registrationDto.getEmail());
+
+        if (optionalUser.isPresent()) {
+            result.reject("user", "There is already an account registered with that email");
+            logger.error("There is already an account registered with that email");
+            return;
+        }
+
+        if (registrationDto.getEmail() == null || Objects.equals(registrationDto.getEmail(), "") ||
+                (registrationDto.getPassword() == null || Objects.equals(registrationDto.getPassword(), ""))){
+            result.reject("user", "Fields can't be empty");
+            logger.error("Fields can't be empty");
+            return;
+        }
+
+        if (!Objects.equals(registrationDto.getEmail(), registrationDto.getConfirmEmail())){
+            result.reject("user", "The email addresses must match");
+            logger.error("The email addresses must match");
+            return;
+        }
+
+        if (!Objects.equals(registrationDto.getPassword(), registrationDto.getConfirmPassword())){
+            result.reject("user", "The passwords must match");
+            logger.error("The passwords must match");
+            return;
+        }
+
         User newUser = new User(registrationDto.getEmail(), passwordEncoder.encode(registrationDto.getPassword()));
         Set<Role> newUsersRole = new HashSet<>();
         newUsersRole.add(roleRepository.findByName("ROLE_USER"));
         newUser.setRoles(newUsersRole);
         newUser.setBalanceCurrencyCode(Currency.getInstance(Locale.getDefault()).toString());
-        newUser = userRepository.save(newUser);
-
-        return newUser;
+        userRepository.save(newUser);
     }
 
     public User save(User user) {
@@ -99,7 +124,7 @@ public class MyUserDetailsService implements UserDetailsService {
         String contactEmail = contactDto.getEmail();
 
         if (Objects.equals(user.getEmail(), contactEmail)){
-            result.rejectValue("email", null, "You can't add yourself to your contact list");
+            result.reject("contact", "You can't add yourself to your contact list");
             logger.error("You can't add yourself to your contact list");
             return;
         }
@@ -109,14 +134,14 @@ public class MyUserDetailsService implements UserDetailsService {
             User newContact = optionalContactUser.get();
             Set<User> contacts = user.getContacts();
             if (contacts.contains(newContact)) {
-                result.rejectValue("email", null, "This person is already in the contact list");
+                result.reject("contact",  "This person is already in the contact list");
                 logger.error("This person is already in the contact list");
             } else {
                 contacts.add(newContact);
                 userRepository.save(user);
             }
         } else {
-            result.rejectValue("email", null, "There is no registered user with this email");
+            result.reject("contact", "There is no registered user with this email");
             logger.error("There is no registered user with this email");
         }
     }

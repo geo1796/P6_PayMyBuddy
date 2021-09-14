@@ -41,7 +41,6 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
 
-
             <div class="py-3">
                 <div class="container">
                     <div class="row">
@@ -51,28 +50,25 @@
                     </div>
                 </div>
             </div>
-            <tr th:if="${creditCards.isEmpty()}">
-                <td class="text-center" colspan="3">You don't have any credit card linked to your Pay My Buddy
-                    account.
-                </td>
-            </tr>
-            <div class="py-2">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-3 bg-success">
-                            <h4 class="text-center">Card number<br></h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="">
-                <div class="container">
-                    <div class="row" data-th-each="creditCard : ${ creditCards }">
-                        <div class="col-md-3 text-center" data-th-text="${ creditCard.cardNumber }"></div><br><br>
-                    </div>
+            <tr th:if="${creditCards.isEmpty()}">
+                <div class="alert alert-info">You don't have any credit card linked to your Pay My Buddy
+                    account.
                 </div>
-            </div>
+            </tr>
+
+            <table class="table table-striped" th:if="${!creditCards.isEmpty()}">
+                <thead>
+                <tr>
+                    <th scope="col">Card number</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-th-each="card : ${ creditCards }">
+                    <td data-th-text="${ card.cardNumber }"></td>
+                </tr>
+                </tbody>
+            </table>
 
             <br>
             <div class="form-group">

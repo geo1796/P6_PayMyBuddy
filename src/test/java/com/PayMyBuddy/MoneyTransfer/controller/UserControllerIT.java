@@ -27,7 +27,7 @@ public class UserControllerIT {
     private ContactDto contactDto;
 
     @BeforeEach
-    public void init(){ this.contactDto = new ContactDto(); }
+    public void setup(){ this.contactDto = new ContactDto(); }
 
     @WithMockUser(username = "son.goku@mail.com")
     @Test

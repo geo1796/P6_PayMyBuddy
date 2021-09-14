@@ -25,6 +25,14 @@ public class TransactionDto implements Comparable<TransactionDto> {
 
     @Override
     public int compareTo(TransactionDto o) {
-        return - getEndDate().compareTo(o.getEndDate());
+        Date thisDate = getEndDate();
+        Date otherDate = o.getEndDate();
+
+        if (thisDate.before(otherDate))
+            return 1;
+        else if (otherDate.before(thisDate))
+            return -1;
+
+        return 0;
     }
 }

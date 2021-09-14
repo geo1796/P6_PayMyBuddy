@@ -52,7 +52,11 @@
                 </div>
             </div>
 
-            <table class="table table-striped">
+            <tr th:if="${creditCardTransactions.isEmpty()}">
+                <div class="alert alert-info">You don't have any credit card transaction</div>
+            </tr>
+
+            <table class="table table-striped" th:if="${!creditCardTransactions.isEmpty()}">
                 <thead>
                 <tr>
                     <th scope="col">Card number</th>
