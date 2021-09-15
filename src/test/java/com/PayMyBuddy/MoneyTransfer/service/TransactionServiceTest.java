@@ -1,6 +1,8 @@
 package com.PayMyBuddy.MoneyTransfer.service;
 
 import com.PayMyBuddy.MoneyTransfer.dto.TransactionDto;
+import com.PayMyBuddy.MoneyTransfer.mapper.TransactionMapper;
+import com.PayMyBuddy.MoneyTransfer.model.Transaction;
 import com.PayMyBuddy.MoneyTransfer.model.User;
 import com.PayMyBuddy.MoneyTransfer.repository.TransactionRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,11 +16,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 
-import java.util.HashSet;
-import java.util.Optional;
+import java.time.Instant;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +30,8 @@ public class TransactionServiceTest {
     private MyUserDetailsService myUserDetailsService;
     @Mock
     private TransactionRepository transactionRepository;
+    @Mock
+    private TransactionMapper transactionMapper;
 
     @InjectMocks
     private TransactionService transactionService;
@@ -94,5 +97,54 @@ public class TransactionServiceTest {
         transactionService.addTransaction(transactionDto, result);
 
         assertFalse(result.hasErrors());
+    }
+
+    @Test
+    public void testGetTransactionsAsSenderDtos(){
+        Set<Transaction> transactionsAsSender = new HashSet<>();
+        Transaction transactionAsSender = new Transaction();
+        transactionsAsSender.add(transactionAsSender);
+        sender.setTransactionsAsSender(transactionsAsSender);
+
+        when(myUserDetailsService.findUser()).thenReturn(sender);
+        when(transactionMapper.toDto(transactionAsSender)).thenReturn(transactionDto);
+
+        List<TransactionDto> expected = new ArrayList<>();
+        expected.add(transactionDto);
+        List<TransactionDto> actual = transactionService.getTransactionAsSenderDtos();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetTransactionsAsReceiverDtos() {
+        Set<Transaction> transactionsAsReceiver = new HashSet<>();
+        Transaction transactionAsReceiver = new Transaction();
+        transactionsAsReceiver.add(transactionAsReceiver);
+        sender.setTransactionsAsReceiver(transactionsAsReceiver);
+
+        when(myUserDetailsService.findUser()).thenReturn(sender);
+        when(transactionMapper.toDto(transactionAsReceiver)).thenReturn(transactionDto);
+
+        List<TransactionDto> expected = new ArrayList<>();
+        expected.add(transactionDto);
+        List<TransactionDto> actual = transactionService.getTransactionAsReceiverDtos();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetAllTransactionDtos(){
+        testGetTransactionsAsReceiverDtos();
+        testGetTransactionsAsSenderDtos();
+
+        List<TransactionDto> expected = new ArrayList<>();
+        transactionDto.setEndDate(Date.from(Instant.now()));
+        expected.add(transactionDto);
+        expected.add(transactionDto);
+
+        List<TransactionDto> actual = transactionService.getAllTransactionDtos();
+
+        assertEquals(expected, actual);
     }
 }

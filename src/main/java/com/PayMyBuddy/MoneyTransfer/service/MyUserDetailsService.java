@@ -148,6 +148,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     public Iterable<ContactDto> getUserContacts() {
         ArrayList<ContactDto> result = new ArrayList<>();
+
         findUser().getContacts().forEach(
                 contact -> result.add(contactMapper.toDto(contact))
         );

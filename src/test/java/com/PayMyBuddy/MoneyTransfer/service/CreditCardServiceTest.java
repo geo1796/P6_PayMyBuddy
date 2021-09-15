@@ -18,9 +18,9 @@ import org.springframework.validation.BindingResult;
 
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,6 +40,7 @@ public class CreditCardServiceTest {
     private User user;
     private CreditCard creditCard;
     private CreditCardDto creditCardDto;
+    private BindingResult result;
 
     @BeforeAll
     public void setup(){
@@ -57,6 +58,8 @@ public class CreditCardServiceTest {
         HashSet<CreditCard> usersCreditCards = new HashSet<>();
         usersCreditCards.add(creditCard);
         user.setCreditCards(usersCreditCards);
+
+        result = new BeanPropertyBindingResult(creditCardDto, "creditCard");
     }
 
     @Test
@@ -65,7 +68,6 @@ public class CreditCardServiceTest {
         when(creditCardMapper.toEntity(creditCardDto)).thenReturn(creditCard);
         when(creditCardRepository.findByCardNumber(creditCardDto.getCardNumber())).thenReturn(Optional.empty());
 
-        BindingResult result = new BeanPropertyBindingResult(creditCardDto, "creditCard");
         creditCardService.addCreditCard(creditCardDto, result);
         assertFalse(result.hasErrors());
     }
@@ -76,7 +78,7 @@ public class CreditCardServiceTest {
         when(myUserDetailsService.findUser()).thenReturn(user);
         when(creditCardRepository.findByCardNumber(creditCardDto.getCardNumber())).thenReturn(Optional.of(creditCard));
 
-        BindingResult result = new BeanPropertyBindingResult(creditCardDto, "creditCard");
+
         creditCardService.addCreditCard(creditCardDto, result);
         assertFalse(result.hasErrors());
     }
@@ -86,7 +88,7 @@ public class CreditCardServiceTest {
         when(myUserDetailsService.findUser()).thenReturn(user);
         when(creditCardRepository.findByCardNumber(creditCardDto.getCardNumber())).thenReturn(Optional.of(creditCard));
 
-        BindingResult result = new BeanPropertyBindingResult(creditCardDto, "creditCard");
+
         creditCardService.addCreditCard(creditCardDto, result);
         assertTrue(result.hasErrors());
     }
@@ -95,9 +97,20 @@ public class CreditCardServiceTest {
     public void testAddExpiredCreditCard() {
         creditCardDto.setExpirationDate("2000-01-01");
 
-        BindingResult result = new BeanPropertyBindingResult(creditCardDto, "creditCard");
         creditCardService.addCreditCard(creditCardDto, result);
         assertTrue(result.hasErrors());
+    }
+
+    @Test
+    public void testFindCreditCardDto(){
+        when(myUserDetailsService.findUser()).thenReturn(user);
+        when(creditCardMapper.toDto(creditCard)).thenReturn(creditCardDto);
+
+        Set<CreditCardDto> actual = creditCardService.findCreditCardDtos();
+        Set<CreditCardDto> expected = new HashSet<>();
+        expected.add(creditCardDto);
+
+        assertEquals(expected, actual);
     }
 
 }

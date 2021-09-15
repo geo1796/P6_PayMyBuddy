@@ -1,6 +1,8 @@
 package com.PayMyBuddy.MoneyTransfer.service;
 
 import com.PayMyBuddy.MoneyTransfer.dto.ContactDto;
+import com.PayMyBuddy.MoneyTransfer.dto.UserRegistrationDto;
+import com.PayMyBuddy.MoneyTransfer.mapper.ContactMapper;
 import com.PayMyBuddy.MoneyTransfer.model.Role;
 import com.PayMyBuddy.MoneyTransfer.model.User;
 import com.PayMyBuddy.MoneyTransfer.repository.RoleRepository;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -17,13 +20,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 
@@ -33,6 +38,8 @@ public class MyUserDetailsServiceTest {
 
     @Mock
     UserRepository userRepository;
+    @Mock
+    private ContactMapper contactMapper;
 
 
     @InjectMocks
@@ -42,13 +49,19 @@ public class MyUserDetailsServiceTest {
     private ContactDto contact;
     private User usersContact;
     private HashSet<User> usersContacts;
+    private BindingResult result;
+    private UserRegistrationDto registrationDto;
+
 
     @BeforeAll
     public void setup(){
-
         user = new User();
         user.setEmail("user@mail.com");
         user.setPassword("user123");
+
+        registrationDto = new UserRegistrationDto();
+        registrationDto.setEmail(user.getEmail());
+        registrationDto.setPassword(user.getPassword());
 
         usersContacts = new HashSet<>();
         contact = new ContactDto();
@@ -58,6 +71,10 @@ public class MyUserDetailsServiceTest {
         usersContact.setEmail(contact.getEmail());
         usersContacts.add(usersContact);
         user.setContacts(usersContacts);
+        Role role = new Role("ROLE_USER");
+        Set<Role> usersRole = new HashSet<>();
+        usersRole.add(role);
+        user.setRoles(usersRole);
 
         Authentication authentication = Mockito.mock(Authentication.class);
         when(authentication.getName()).thenReturn(user.getEmail());
@@ -68,14 +85,25 @@ public class MyUserDetailsServiceTest {
 
     @BeforeEach
     public void eachSetup() {
+        result = new BeanPropertyBindingResult(contact, "contact");
         user.setContacts(usersContacts);
+    }
+
+    @Test
+    public void testAddYourselfInContactList(){
+        ContactDto self = new ContactDto();
+        self.setEmail(user.getEmail());
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        myUserDetailsService.addContact(self, result);
+
+        assertTrue(result.hasErrors());
     }
 
     @Test
     public void testAddContactAlreadyInContactList() {
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(userRepository.findByEmail(usersContact.getEmail())).thenReturn(Optional.of(usersContact));
-        BindingResult result = new BeanPropertyBindingResult(contact, "contact");
+
         myUserDetailsService.addContact(contact, result);
 
         assertTrue(result.hasErrors());
@@ -85,7 +113,6 @@ public class MyUserDetailsServiceTest {
     public void testAddNotExistingContact() {
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(userRepository.findByEmail(usersContact.getEmail())).thenReturn(Optional.empty());
-        BindingResult result = new BeanPropertyBindingResult(contact, "contact");
         myUserDetailsService.addContact(contact, result);
 
         assertTrue(result.hasErrors());
@@ -93,12 +120,63 @@ public class MyUserDetailsServiceTest {
 
     @Test
     public void testAddContactSuccess() {
-        user.setContacts(new HashSet<>());
+        ContactDto newContactDto = new ContactDto();
+        newContactDto.setEmail("newContactDto@mail.com");
+        User newContact = new User();
+        newContact.setEmail(newContactDto.getEmail());
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
-        when(userRepository.findByEmail(usersContact.getEmail())).thenReturn(Optional.of(usersContact));
-        BindingResult result = new BeanPropertyBindingResult(contact, "contact");
-        myUserDetailsService.addContact(contact, result);
+        when(userRepository.findByEmail(newContact.getEmail())).thenReturn(Optional.of(newContact));
+        myUserDetailsService.addContact(newContactDto, result);
 
         assertFalse(result.hasErrors());
+    }
+
+    @Test
+    public void testGetUserContacts() {
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(contactMapper.toDto(usersContact)).thenReturn(contact);
+        List<ContactDto> expected = new ArrayList<>();
+        expected.add(contact);
+        List<ContactDto> actual = (List<ContactDto>) myUserDetailsService.getUserContacts();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testSaveAlreadyRegisteredUser(){
+        when(userRepository.findByEmail(registrationDto.getEmail())).thenReturn(Optional.of(user));
+        myUserDetailsService.save(registrationDto, result);
+        assertTrue(result.hasErrors());
+    }
+
+    @Test
+    public void testSaveUserWithWrongConfirmEmail(){
+        when(userRepository.findByEmail(registrationDto.getEmail())).thenReturn(Optional.empty());
+        registrationDto.setConfirmEmail("wrong");
+        myUserDetailsService.save(registrationDto, result);
+        assertTrue(result.hasErrors());
+    }
+
+    @Test
+    public void testSaveUserWithWrongConfirmPassword(){
+        registrationDto.setConfirmEmail(registrationDto.getEmail());
+        registrationDto.setConfirmPassword("wrong");
+        when(userRepository.findByEmail(registrationDto.getEmail())).thenReturn(Optional.empty());
+        myUserDetailsService.save(registrationDto, result);
+        assertTrue(result.hasErrors());
+    }
+
+    @Test
+    public void testLoadNonRegisteredUser(){
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
+        assertThrows(UsernameNotFoundException.class, () -> myUserDetailsService.loadUserByUsername(user.getEmail()));
+    }
+
+    @Test
+    public void testLoadRegisteredUser(){
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        UserDetails result = myUserDetailsService.loadUserByUsername(user.getEmail());
+        assertEquals(result.getUsername(), user.getEmail());
+        assertEquals(result.getPassword(), user.getPassword());
     }
 }
