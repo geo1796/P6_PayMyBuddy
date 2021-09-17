@@ -31,6 +31,7 @@ public class UserController {
     @GetMapping("addContact")
     public String showNewContactForm(Model model){
         logger.info("calling method : showNewContactForm");
+        model.addAttribute("contactList", myUserDetailsService.getUserContacts());
         model.addAttribute("errors", errors);
         return "new-contact-form";
     }

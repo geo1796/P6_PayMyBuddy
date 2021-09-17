@@ -21,20 +21,26 @@
                     class="icon-bar"></span> <span class="icon-bar"></span> <span
                     class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#" th:href="@{/}">Pay My Buddy</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li sec:authorize="isAuthenticated()"><a th:href="@{/transaction}">Send Money</a></li>
-                <li sec:authorize="isAuthenticated()"><a th:href="@{/fundAccount}">Fund my account</a></li>
-                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/}">Home</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/transaction}">Send Money</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/fundAccount}">Fund my account</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/contacts}">Contacts</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/logout}">Logout</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
-<br>
-<br>
+<br><br><br>
+
+<div class='col-xs-3'>
+    <button type="button" class="btn btn-success">
+        <h3>
+            Pay My Buddy
+        </h3>
+    </button>
+</div>
 <!-- Create HTML registration form -->
 <div class="container">
 
