@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Pay My Buddy home</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+
+</head>
+<body>
+<!-- create navigation bar ( header) -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span> <span
+                    class="icon-bar"></span> <span class="icon-bar"></span> <span
+                    class="icon-bar"></span>
+            </button>
+            <ul class="nav navbar-nav">
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/}">Home</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/transaction}">Send Money</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/fundAccount}">Fund my account</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/contacts}">Contacts</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<br><br><br>
+
+<div class='col-xs-3'>
+    <button type="button" class="btn btn-success">
+        <h3>
+            Pay My Buddy
+        </h3>
+    </button>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+
+            <div class="form-group">
+                <h1>Send money to your friends easily.</h1>
+                Welcome <span sec:authentication="principal.username">User</span>
+                <br>you have
+                    <td class="align-middle" th:text="${#numbers.formatDecimal(user.balance,2,2) + ' ' + user.balanceCurrencyCode}"></td>
+                on your Pay My Buddy account.
+            </div>
+            <!--
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <h3>You will see this only if you are ADMIN</h3>
+                <p>
+                    <a th:href="@{/admin}">Admin Home</a>
+                </p>
+            </div>
+            -->
+
+            <div>
+                <ul>
+                    <div class="form-group">
+                        <li>
+                            <button class="btn btn-light"><a th:href="@{/contacts}">My contacts</a></button>
+                        </li>
+                    </div>
+                    <div class="form-group">
+                        <li>
+                            <button class="btn btn-light"><a th:href="@{/transaction}">Send money to a friend</a></button>
+                        </li>
+                    </div>
+                    <div class="form-group">
+                        <li>
+                            <button class="btn btn-light"><a th:href="@{/fundAccount}">Fund your Pay My Buddy account</a></button>
+                        </li>
+                    </div>
+                    <div class="form-group">
+                        <li>
+                            <button class="btn btn-light"><a th:href="@{/transactions}">My transactions</a></button>
+                        </li>
+                    </div>
+                    <div class="form-group">
+                        <li>
+                            <button class="btn btn-light"><a th:href="@{/bankAccounts}">My bank accounts</a></button>
+                        </li>
+                    </div>
+                    <div class="form-group">
+                        <li>
+                            <button class="btn btn-light"><a th:href="@{/creditCards}">My credit cards</a></button>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

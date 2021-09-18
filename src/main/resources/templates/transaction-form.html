@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Transaction form</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+</head>
+<body>
+
+<!-- create navigation bar ( header) -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span> <span
+                    class="icon-bar"></span> <span class="icon-bar"></span> <span
+                    class="icon-bar"></span>
+            </button>
+            <ul class="nav navbar-nav">
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/}">Home</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/transaction}">Send Money</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/fundAccount}">Fund my account</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/contacts}">Contacts</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<br><br><br>
+
+<div class='col-xs-3'>
+    <button type="button" class="btn btn-success">
+        <h3>
+            Pay My Buddy
+        </h3>
+    </button>
+</div>
+<!-- Create HTML registration form -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+
+            <!-- success message -->
+            <div th:if="${param.success}">
+                <div class="alert alert-info">Your money has been sent</div>
+            </div>
+
+            <h1>Transaction form</h1>
+
+            <form th:action="@{/transaction}" method="post" th:object="${transaction}">
+
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger">
+                        <tr th:if="${errors.isEmpty()}">An error occurred</tr>
+                        <ul>
+                            <li th:each="error, stat : ${errors}" th:text="${error.defaultMessage}" class="error"/>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label"> Amount </label> <input
+                        id="amount" class="form-control" type="number" step=".01"
+                        th:field="*{amount}" required autofocus="autofocus"/>
+                </div>
+
+                <div class="form-group">
+                    <select th:field="*{currencyCode}" required autofocus="autofocus">
+                        <option value="EUR">EUR</option>
+                        <option value="USD">USD</option>
+                        <option value="GBP">GBP</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    Receiver email :
+                    <select th:field="*{receiverEmail}">
+                        <option th:each="contact, stat : ${contactList}" th:value="${contact.email}"
+                                th:text="${contact.email}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="description"> Description </label> <input
+                        id="description" class="form-control" th:field="*{description}" required
+                        autofocus="autofocus" />
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">Send</button>
+                    <span><a href="/" th:href="@{/transactions}">Transaction history</a></span>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div class="py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-left">
+                    <h4 class="">My latest transactions<br></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Sender email</th>
+            <th scope="col">Receiver email</th>
+            <th scope="col">Description</th>
+            <th scope="col">Transaction amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-th-each="transaction : ${ transactionPage.content }">
+            <td data-th-text="${ transaction.senderEmail }"></td>
+            <td data-th-text="${ transaction.receiverEmail }"></td>
+            <td data-th-text="${ transaction.description }"></td>
+            <td data-th-text="${#numbers.formatDecimal(transaction.amount,2,2) + ' ' + transaction.currencyCode}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <br>
+
+    <div class="text-center">
+        <div th:if="${transactionPage.totalPages > 0}" class="pagination"
+             th:each="pageNumber : ${pageNumbers}">
+            <a th:href="@{/transaction(size=${transactionPage.size}, page=${pageNumber})}"
+               th:text=${pageNumber}
+               th:class="${pageNumber==transactionPage.number + 1} ? active"></a>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

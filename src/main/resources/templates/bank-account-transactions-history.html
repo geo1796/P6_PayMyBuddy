@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Bank account transactions history</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+
+</head>
+<body>
+
+<!-- create navigation bar ( header) -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span> <span
+                    class="icon-bar"></span> <span class="icon-bar"></span> <span
+                    class="icon-bar"></span>
+            </button>
+            <ul class="nav navbar-nav">
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/}">Home</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/transaction}">Send Money</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/fundAccount}">Fund my account</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/contacts}">Contacts</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<br><br><br>
+
+<div class='col-xs-3'>
+    <button type="button" class="btn btn-success">
+        <h3>
+            Pay My Buddy
+        </h3>
+    </button>
+</div>
+
+<div class = "container">
+    <div class = "row">
+        <div class = "col-md-6 col-md-offset-3">
+
+
+            <div class="py-3">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-left">
+                            <h3 class="">My bank accounts transactions<br></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <tr th:if="${bankAccountTransactions.isEmpty()}">
+                <div class="alert alert-info">You don't have any bank account transaction</div>
+            </tr>
+
+            <table class="table table-striped" th:if="${!bankAccountTransactions.isEmpty()}">
+                <thead>
+                <tr>
+                    <th scope="col">Account iban</th>
+                    <th scope="col">Transaction amount</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-th-each="transaction : ${ bankAccountTransactions }">
+                    <td data-th-text="${ transaction.iban }"></td>
+                    <td data-th-text="${#numbers.formatDecimal(transaction.amount,2,2) + ' ' + transaction.currencyCode}"></td>
+                    <td th:if="${transaction.toBalance}">From bank account to Pay My Buddy account.</td>
+                    <td th:if="${!transaction.toBalance}">From Pay My Buddy account to bank account.</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <br>
+            <div class="form-group">
+                <span>Send money to your Pay My Buddy account with one of your bank accounts ? <a href="/" th:href="@{/bankAccountTransaction}">Click here</a></span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

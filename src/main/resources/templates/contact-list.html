@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Contact list</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+
+</head>
+<body>
+
+<!-- create navigation bar ( header) -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span> <span
+                    class="icon-bar"></span> <span class="icon-bar"></span> <span
+                    class="icon-bar"></span>
+            </button>
+            <ul class="nav navbar-nav">
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/}">Home</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/transaction}">Send Money</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/fundAccount}">Fund my account</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/contacts}">Contacts</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="navbar-brand" th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<br><br><br>
+
+<div class='col-xs-3'>
+    <button type="button" class="btn btn-success">
+        <h3>
+            Pay My Buddy
+        </h3>
+    </button>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+
+
+            <div class="py-3">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-left">
+                            <h3 class="">My contacts<br></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <tr th:if="${contactList.isEmpty()}">
+                <td class="text-center" colspan="3">You don't have any friend :'(</td>
+            </tr>
+
+            <br><br>
+
+            <table class="table table-striped" th:if="${!contactList.isEmpty()}">
+                <thead>
+                <tr>
+                    <th scope="col">Contact email</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-th-each="contact : ${ contactList }">
+                    <td data-th-text="${ contact.email }"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <br>
+            <div class="form-group">
+                <span>Add a new contact ? <a th:href="@{/addContact}">Click here</a></span><br>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
