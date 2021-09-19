@@ -51,7 +51,7 @@ public class User {
     )
     private Set<CreditCardTransaction> creditCardTransactions;
 
-    @OneToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "User_contact",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -59,7 +59,7 @@ public class User {
     )
     private Set<User> contacts;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "User_credit_card",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -67,7 +67,7 @@ public class User {
     )
     private Set<CreditCard> creditCards;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "User_bank_account",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -75,9 +75,7 @@ public class User {
     )
     private Set<BankAccount> bankAccounts;
 
-    @ManyToMany(
-            fetch = FetchType.EAGER, cascade = CascadeType.ALL
-    )
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "User_role",
             joinColumns = @JoinColumn(name = "user_id"),

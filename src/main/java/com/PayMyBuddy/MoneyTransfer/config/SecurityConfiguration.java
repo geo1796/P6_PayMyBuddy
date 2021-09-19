@@ -36,12 +36,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .headers()
-                .frameOptions().sameOrigin()
-                .and()
                 .authorizeRequests()
                 .antMatchers("/registration**").permitAll()
-                .antMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -57,7 +53,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login")
                 .and()
                 .csrf().disable()
-                .exceptionHandling()
         ;
     }
 

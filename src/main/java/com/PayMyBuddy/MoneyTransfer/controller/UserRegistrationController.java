@@ -42,15 +42,20 @@ public class UserRegistrationController {
     public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDto registrationDto,
                                       BindingResult result) {
         logger.info("calling method : registerUserAccount");
-        myUserDetailsService.save(registrationDto, result);
 
+        if (result.hasErrors()) { // in case the registrationDto in not valid
+            errors = result.getAllErrors();
+            logger.error("can't register user");
+            return "redirect:/registration?error";
+        }
+
+        myUserDetailsService.save(registrationDto, result);
 
         if (result.hasErrors()) {
             errors = result.getAllErrors();
             logger.error("can't register user");
             return "redirect:/registration?error";
         }
-
 
         logger.info("user registration success");
         return "redirect:/registration?success";

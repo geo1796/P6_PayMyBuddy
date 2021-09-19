@@ -47,10 +47,4 @@ public class MainControllerIT {
         mockMvc.perform(formLogin("/login").user("springuser").password("wrongpassword")).andExpect(unauthenticated());
     }
 
-    @WithMockUser
-    @Test
-    public void testGetAdminShouldBeForbidden() throws Exception{
-        mockMvc.perform(get("/admin")).andExpect(status().isForbidden());
-    }
-
 }
